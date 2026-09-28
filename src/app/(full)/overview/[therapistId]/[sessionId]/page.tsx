@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { NOT_IN_DEMO } from "@/lib/config";
 import { SessionMindmapTab } from "@/components/session/session-mindmap-tab";
+import { QuestionsProvider } from "@/lib/client/questions-store";
 import { getClientGraph, getSession } from "@/lib/server/queries";
 import { clientHref, sessionHref, type SessionTab } from "@/lib/routes";
 import { cn } from "@/lib/utils";
@@ -65,7 +66,9 @@ export default async function SessionPage({ params, searchParams }: PageProps<"/
             This session is still processing.
           </div>
         ) : tab === "mindmap" ? (
-          <SessionMindmapTab graph={graph} sessionId={session.id} />
+          <QuestionsProvider initial={graph.questions}>
+            <SessionMindmapTab graph={graph} sessionId={session.id} />
+          </QuestionsProvider>
         ) : (
           <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed text-klarify-neutral-500 text-sm">
             Reflection questions — build step 7

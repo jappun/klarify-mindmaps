@@ -78,3 +78,15 @@ describe("layouts are deterministic and non-overlapping", () => {
       }
   });
 });
+
+describe("nodeDetails", () => {
+  it("hides later sessions' quotes and connections when capped at a session", async () => {
+    const { nodeDetails } = await import("./node-details");
+    const capped = nodeDetails(graph, "a", 2)!;
+    expect(capped.occurrences.map((o) => o.session_id)).toEqual(["S1"]);
+    expect(capped.connections.map((c) => c.node.id).sort()).toEqual(["b", "d"]);
+    const all = nodeDetails(graph, "a")!;
+    expect(all.occurrences.map((o) => o.session_id)).toEqual(["S1", "S3"]);
+    expect(all.connections.map((c) => c.node.id).sort()).toEqual(["b", "c", "d"]);
+  });
+});

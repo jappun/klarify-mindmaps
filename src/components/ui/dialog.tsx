@@ -10,10 +10,17 @@ export const DialogTitle = D.Title;
 export const DialogDescription = D.Description;
 
 // Overlay + content classes from Klarify's Dialog primitives.
-export function DialogContent({ className, children, ...props }: React.ComponentProps<typeof D.Content>) {
+export function DialogContent({
+  className,
+  overlayClassName,
+  children,
+  ...props
+}: React.ComponentProps<typeof D.Content> & { overlayClassName?: string }) {
   return (
     <D.Portal>
-      <D.Overlay className="fixed inset-0 z-50 bg-black/80 data-[state=closed]:animate-out data-[state=open]:animate-in" />
+      <D.Overlay
+        className={cn("fixed inset-0 z-50 bg-black/80 data-[state=closed]:animate-out data-[state=open]:animate-in", overlayClassName)}
+      />
       <D.Content
         aria-describedby={undefined}
         className={cn(

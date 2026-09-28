@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useEscape } from "@/lib/client/use-escape";
 import { ArrowLeft } from "lucide-react";
 import { MindmapCanvas, type RenderEdge, type RenderNode } from "./canvas";
 import { MindmapInfoButton } from "./info-button";
@@ -18,13 +19,10 @@ export function SessionMindmap({
   graph,
   sessionId,
   onOpenNode,
-  modalOpen = false,
 }: {
   graph: ClientGraph;
   sessionId: string;
   onOpenNode: (nodeId: string) => void;
-  /** While the node modal is open, Esc belongs to the modal. */
-  modalOpen?: boolean;
 }) {
   const model = useMemo(() => buildSessionModel(graph, sessionId), [graph, sessionId]);
   const [focusId, setFocusId] = useState<string | null>(null);
@@ -139,18 +137,7 @@ export function SessionMindmap({
     [focusId, onOpenNode],
   );
 
-  // Esc exits focus — unless the modal is open (then Esc only closes the modal).
-  const modalOpenRef = useRef(modalOpen);
-  useEffect(() => {
-    modalOpenRef.current = modalOpen;
-  }, [modalOpen]);
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !modalOpenRef.current) setFocusId(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  useEscape(() => setFocusId(null));
 
   const toggleType = (type: NodeType) =>
     setHidden((h) => {
