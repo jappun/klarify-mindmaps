@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { NOT_IN_DEMO } from "@/lib/config";
+import { ReflectionsTab } from "@/components/session/reflections-tab";
 import { SessionMindmapTab } from "@/components/session/session-mindmap-tab";
 import { QuestionsProvider } from "@/lib/client/questions-store";
 import { getClientGraph, getSession } from "@/lib/server/queries";
@@ -65,14 +66,14 @@ export default async function SessionPage({ params, searchParams }: PageProps<"/
             {/* TODO(phase 8): processing / failed states */}
             This session is still processing.
           </div>
-        ) : tab === "mindmap" ? (
-          <QuestionsProvider initial={graph.questions}>
-            <SessionMindmapTab graph={graph} sessionId={session.id} />
-          </QuestionsProvider>
         ) : (
-          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed text-klarify-neutral-500 text-sm">
-            Reflection questions — build step 7
-          </div>
+          <QuestionsProvider initial={graph.questions}>
+            {tab === "mindmap" ? (
+              <SessionMindmapTab graph={graph} sessionId={session.id} />
+            ) : (
+              <ReflectionsTab graph={graph} sessionId={session.id} />
+            )}
+          </QuestionsProvider>
         )}
       </div>
     </div>
