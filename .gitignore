@@ -1,6 +1,7 @@
 screens/
 webpages/
 .env*
+!.env.example
 node_modules/
 .DS_Store
 .next/

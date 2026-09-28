@@ -4,7 +4,7 @@ import { ArrowLeft, ClipboardList, FileText, FolderOpen, Map, MessageSquare, Shi
 import { ClientSessionList } from "@/components/clients/client-session-list";
 import { RecordSessionMenu } from "@/components/clients/record-session-menu";
 import { NOT_IN_DEMO } from "@/lib/config";
-import { getClient, listClientSessions } from "@/lib/data";
+import { getClient, listClientSessions } from "@/lib/server/queries";
 import { formatShortMonthYear } from "@/lib/format";
 import { clientHref, type ClientTab } from "@/lib/routes";
 import { cn } from "@/lib/utils";

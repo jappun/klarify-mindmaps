@@ -1,5 +1,5 @@
 import { RecordsView } from "@/components/records/records-view";
-import { listRecentSessions } from "@/lib/data";
+import { listRecentSessions } from "@/lib/server/queries";
 
 export const dynamic = "force-dynamic";
 

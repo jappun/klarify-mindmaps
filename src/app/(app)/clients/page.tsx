@@ -1,5 +1,5 @@
 import { ClientsTable } from "@/components/clients/clients-table";
-import { listClients } from "@/lib/data";
+import { listClients } from "@/lib/server/queries";
 
 export const dynamic = "force-dynamic";
 

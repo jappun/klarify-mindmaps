@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { NOT_IN_DEMO } from "@/lib/config";
-import { getSession } from "@/lib/data";
+import { getSession } from "@/lib/server/queries";
 import { clientHref, sessionHref, type SessionTab } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
