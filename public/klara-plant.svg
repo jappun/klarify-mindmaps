@@ -1,0 +1,43 @@
+<svg role="img" aria-label="Excited Klarify plant illustration" width="208" height="293" viewBox="0 0 208 293" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+        d="M102.956 98.7487C105.158 28.9176 32.6099 -18.5561 13.4228 7.013C-15.5637 45.6342 103.573 92.6549 102.956 144.637V98.7487Z"
+        fill="url(#paint0_linear_464_1353)" />
+    <path
+        d="M102.338 107.951C100.588 52.1397 157.923 14.692 173.919 34.6202C198.5 65.2743 102.564 102.29 102.358 144.637V107.951H102.338Z"
+        fill="#4DA51B" />
+    <path d="M41.3182 29.6992C41.3182 29.6992 95.2562 76.9464 107.732 135.578" stroke="#387A00"
+        stroke-width="8.2348" stroke-miterlimit="10" stroke-linecap="round" />
+    <path d="M155.638 49.3193C155.638 49.3193 108.658 90.3904 99.5179 131.029" stroke="#387A00"
+        stroke-width="8.2348" stroke-miterlimit="10" stroke-linecap="round" />
+    <path
+        d="M171.14 259.677L161.731 262.786L45.6826 262.6L33.3921 258.771C13.5257 252.595 0 234.231 0 213.438V116.968H207.435V210.412C207.435 233.017 192.736 252.986 171.14 259.677Z"
+        fill="url(#paint1_radial_464_1353)" />
+    <path d="M45.7031 262.601L161.752 262.786V292.04H45.7031V262.601Z" fill="#FF854D" />
+    <path
+        d="M145.447 179.142C139.58 173.275 130.089 173.275 124.222 179.142C124.222 179.142 126.116 166.769 139.827 164.052"
+        stroke="black" stroke-width="8.2348" stroke-linecap="round" stroke-linejoin="round" />
+    <path
+        d="M62.0081 179.142C67.8754 173.275 77.366 173.275 83.2333 179.142C83.2333 179.142 81.3393 166.769 67.6283 164.052"
+        stroke="black" stroke-width="8.2348" stroke-linecap="round" stroke-linejoin="round" />
+    <path
+        d="M103.717 213.5C84.0979 213.5 77.7365 196.166 96.4295 196.166H110.984C129.698 196.166 123.337 213.5 103.697 213.5H103.717Z"
+        fill="black" stroke="black" stroke-width="6.1761" stroke-miterlimit="10"
+        stroke-linecap="round" />
+    <path
+        d="M116.131 196.722C100.959 196.166 99.8264 208.333 98.2206 213.006C99.9087 213.315 101.762 213.5 103.738 213.5C121.278 213.5 128.195 199.665 116.152 196.722H116.131Z"
+        fill="#FF854D" stroke="black" stroke-width="6.1761" stroke-miterlimit="10"
+        stroke-linecap="round" />
+    <defs>
+        <linearGradient id="paint0_linear_464_1353" x1="50.9117" y1="17.4712" x2="60.4023"
+            y2="88.6816" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4DA51B" />
+            <stop offset="1" stop-color="#387A00" />
+        </linearGradient>
+        <radialGradient id="paint1_radial_464_1353" cx="0" cy="0" r="1"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="translate(103.944 83.7198) scale(155.514 155.514)">
+            <stop offset="0.7" stop-color="#FFB265" />
+            <stop offset="1" stop-color="#FF9665" />
+        </radialGradient>
+    </defs>
+</svg>

@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, ChevronDown, Disc, FileText, Info, LogOut, Megaphone, Settings, Sprout, UsersRound } from "lucide-react";
+import { BookOpen, ChevronDown, Disc, FileText, Info, LogOut, Megaphone, Settings, UsersRound } from "lucide-react";
 import { NOT_IN_DEMO, THERAPIST } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
@@ -11,10 +12,13 @@ const NAV = [
   { label: "Clients", href: "/clients", icon: UsersRound, match: ["/clients"] },
   { label: "Templates", href: NOT_IN_DEMO, icon: FileText, match: [] },
   { label: "Marketing", href: NOT_IN_DEMO, icon: Megaphone, match: [] },
-  // TODO: verify against Klarify — Klara AI uses Klarify's plant SVG; kept out of the repo, lucide Sprout stands in.
-  { label: "Klara AI", href: NOT_IN_DEMO, icon: Sprout, match: [], iconClass: "text-klarify-forest-600" },
+  { label: "Klara AI", href: NOT_IN_DEMO, icon: KlaraPlant, match: [] },
   { label: "Learn Klarify", href: NOT_IN_DEMO, icon: BookOpen, match: [] },
 ];
+
+function KlaraPlant({ className }: { className?: string }) {
+  return <Image src="/klara-plant.svg" alt="" width={16} height={16} className={className} />;
+}
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -52,7 +56,7 @@ export function Sidebar() {
             </div>
           </div>
           <ul className="grid items-start px-1 font-medium text-sm lg:px-2">
-            {NAV.map(({ label, href, icon: Icon, match, iconClass }) => {
+            {NAV.map(({ label, href, icon: Icon, match }) => {
               const active = match.some((m) => pathname.startsWith(m));
               return (
                 <Link
@@ -64,7 +68,7 @@ export function Sidebar() {
                   )}
                 >
                   <span className="shrink-0">
-                    <Icon className={cn("h-4 w-4", iconClass)} />
+                    <Icon className="h-4 w-4" />
                   </span>
                   <span className="wrap-break-word min-w-0 flex-1 leading-tight">{label}</span>
                 </Link>
