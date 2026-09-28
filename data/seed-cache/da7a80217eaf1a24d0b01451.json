@@ -1,0 +1,312 @@
+{
+  "nodes": [
+    {
+      "temp_id": "n1",
+      "type": "narrative",
+      "label": "The Selfless Caregiver",
+      "description": "Story that my life and needs are secondary to caring for others.",
+      "summary": [
+        "Moved back to childhood home to care for mother without being asked",
+        "Assumed she could handle everything because she is a nurse",
+        "Believes taking care of others means completely sacrificing her own life"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 5,
+          "text": "At work, I clock out. At home, there's no clocking out."
+        }
+      ]
+    },
+    {
+      "temp_id": "n2",
+      "type": "narrative",
+      "label": "The Invisible Anger",
+      "description": "Carrying deep resentment while always saying yes and keeping the peace.",
+      "summary": [
+        "Feels furious at brother Daniel for assuming she would take on caregiving",
+        "Keeps anger hidden to protect the family peace and her mother",
+        "Suffers in silence because she believes she is not allowed to complain"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 27,
+          "text": "And I said okay. I always say okay."
+        }
+      ]
+    },
+    {
+      "temp_id": "n3",
+      "type": "narrative",
+      "label": "The Burden Of Obligation",
+      "description": "Feeling trapped by family duty with no end in sight.",
+      "summary": [
+        "Compares her current life to her mother's history of working two jobs without complaint",
+        "Wonders how many years caregiving will last and feels guilty for the thought",
+        "Grieves the loss of her partner, apartment, and freedom in Sacramento"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 47,
+          "text": "And I feel so selfish for even thinking that."
+        }
+      ]
+    },
+    {
+      "temp_id": "n4",
+      "type": "belief",
+      "label": "Not Needing Anything",
+      "description": "Belief that having personal needs or limits is unacceptable.",
+      "summary": [
+        "Lists being patient, never snapping, and keeping the house clean as requirements",
+        "Realized aloud that expecting herself to have zero needs is unrealistic"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 15,
+          "text": "Being patient. Never snapping. Keeping the house clean. Keeping her happy. Not needing anything."
+        }
+      ]
+    },
+    {
+      "temp_id": "n5",
+      "type": "belief",
+      "label": "Expressing Anger Causes Damage",
+      "description": "Assumption that speaking up will cause everyone around her to fall apart.",
+      "summary": [
+        "Fears brother Daniel would get defensive if she shared her true feelings",
+        "Worries her mother would pick up on tension and make things worse"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 43,
+          "text": "If I told him I was angry, he'd get defensive, and then Mom would pick up on the tension"
+        }
+      ]
+    },
+    {
+      "temp_id": "n6",
+      "type": "belief",
+      "label": "My Life Counts Less",
+      "description": "Implicit rule that unmarried people without children must sacrifice their lives.",
+      "summary": [
+        "Notes that because she lacks a spouse or kids, her life was easily packed up",
+        "Feels hurt that nobody asked before thrusting the caregiving role onto her"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 27,
+          "text": "Like I don't have a life because I'm not married and don't have kids"
+        }
+      ]
+    },
+    {
+      "temp_id": "n7",
+      "type": "strategy",
+      "label": "Numbing With Wine And TV",
+      "description": "Using alcohol and television at night to cope with relentless exhaustion.",
+      "summary": [
+        "Relies on two to three glasses of wine after her mother is asleep",
+        "Recognizes it as her only method of self-care and finding quiet time"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 37,
+          "text": "Honestly? Wine and TV after she's asleep. That's my thing."
+        }
+      ]
+    },
+    {
+      "temp_id": "n8",
+      "type": "strategy",
+      "label": "Hiding Emotional Pain",
+      "description": "Crying in secret and suppressing grief to avoid burdening others.",
+      "summary": [
+        "Runs bathroom water so her mother cannot hear her cry",
+        "Has not allowed herself to grieve her ended relationship due to lack of time"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 11,
+          "text": "I go in the bathroom and run the water so she can't hear me."
+        }
+      ]
+    },
+    {
+      "temp_id": "n9",
+      "type": "strategy",
+      "label": "Perpetual Compliance",
+      "description": "Instantly agreeing to demands and suppressing disagreements to keep peace.",
+      "summary": [
+        "Agreed immediately when family assumed she would take on caregiving",
+        "Acknowledges a lifelong pattern of always saying okay"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 27,
+          "text": "And I said okay. I always say okay."
+        }
+      ]
+    },
+    {
+      "temp_id": "n10",
+      "type": "need",
+      "label": "Rest And Restoration",
+      "description": "Longing for physical and mental relief from constant demands.",
+      "summary": [
+        "Suffers from bone-tired exhaustion and severely disrupted sleep patterns",
+        "Yearns for the quiet moment of putting everything down at night"
+      ],
+      "need_category": "Rest",
+      "quotes": [
+        {
+          "utterance_index": 39,
+          "text": "It's like... I can finally put everything down."
+        }
+      ]
+    },
+    {
+      "temp_id": "n11",
+      "type": "need",
+      "label": "Recognition And Being Seen",
+      "description": "Desire to be consulted and valued as a person with her own life.",
+      "summary": [
+        "Expressed deep hurt over not being asked before her life was uprooted",
+        "Articulated the painful feeling that her existence didn't count"
+      ],
+      "need_category": "Identity",
+      "quotes": [
+        {
+          "utterance_index": 31,
+          "text": "Like I didn't count."
+        }
+      ]
+    },
+    {
+      "temp_id": "n12",
+      "type": "need",
+      "label": "Autonomy And Personal Time",
+      "description": "Yearning for genuine personal time independent of caregiving chores.",
+      "summary": [
+        "Imagines having one day a week that is truly hers, not used for errands",
+        "Wants space to reclaim a life outside of her mother's illness"
+      ],
+      "need_category": "Autonomy",
+      "quotes": [
+        {
+          "utterance_index": 59,
+          "text": "I'd have one day a week that was mine. Actually mine."
+        }
+      ]
+    },
+    {
+      "temp_id": "n13",
+      "type": "value",
+      "label": "Family Loyalty And Care",
+      "description": "Deep commitment to protecting and looking after her mother.",
+      "summary": [
+        "Moved across cities and rearranged her entire life to keep her mother safe",
+        "Expresses genuine love for her mother despite the crushing caregiver fatigue"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 47,
+          "text": "I don't mean I want her to die. I love her."
+        }
+      ]
+    },
+    {
+      "temp_id": "n14",
+      "type": "value",
+      "label": "Authenticity And Honesty",
+      "description": "The desire to speak her truth and communicate openly with family.",
+      "summary": [
+        "Expressed a deep wish to be able to talk honestly with her brother Daniel",
+        "Felt a sense of relief after admitting her true feelings in the session"
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 59,
+          "text": "And I'd be able to talk to Daniel without wanting to scream."
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source_temp_id": "n4",
+      "target_temp_id": "n1",
+      "explanation": "The belief that she should have no needs directly fuels her role as the selfless caregiver."
+    },
+    {
+      "source_temp_id": "n9",
+      "target_temp_id": "n1",
+      "explanation": "Her constant compliance and automatic agreement trap her deeper into the caregiver role."
+    },
+    {
+      "source_temp_id": "n6",
+      "target_temp_id": "n1",
+      "explanation": "Believing her life counts less justifies the total sacrifice demanded by her caregiver role."
+    },
+    {
+      "source_temp_id": "n5",
+      "target_temp_id": "n2",
+      "explanation": "Fear of causing damage prevents her from expressing her hidden anger."
+    },
+    {
+      "source_temp_id": "n9",
+      "target_temp_id": "n2",
+      "explanation": "Always saying yes to others builds up the silent rage she carries."
+    },
+    {
+      "source_temp_id": "n3",
+      "target_temp_id": "n1",
+      "explanation": "The overwhelming obligation of duty stems directly from her dedication to caregiving."
+    },
+    {
+      "source_temp_id": "n7",
+      "target_temp_id": "n1",
+      "explanation": "Numbing with wine is her coping mechanism for the relentless exhaustion of caregiving."
+    },
+    {
+      "source_temp_id": "n8",
+      "target_temp_id": "n1",
+      "explanation": "Hiding her emotional pain allows her to maintain her exterior as a strong caregiver."
+    },
+    {
+      "source_temp_id": "n10",
+      "target_temp_id": "n1",
+      "explanation": "Her severe depletion of rest is a direct consequence of continuous caregiving without breaks."
+    },
+    {
+      "source_temp_id": "n11",
+      "target_temp_id": "n2",
+      "explanation": "Not being asked or considered as a person triggers her intense resentment and anger."
+    },
+    {
+      "source_temp_id": "n12",
+      "target_temp_id": "n3",
+      "explanation": "Her lack of personal autonomy is the core pain point within her burden of obligation."
+    },
+    {
+      "source_temp_id": "n13",
+      "target_temp_id": "n1",
+      "explanation": "Her core value of family loyalty is what compelled her into the caregiver narrative."
+    },
+    {
+      "source_temp_id": "n14",
+      "target_temp_id": "n2",
+      "explanation": "Her value of honesty directly contrasts with her suppressed anger toward her brother."
+    }
+  ]
+}

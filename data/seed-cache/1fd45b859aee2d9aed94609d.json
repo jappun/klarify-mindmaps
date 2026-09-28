@@ -1,0 +1,275 @@
+{
+  "nodes": [
+    {
+      "temp_id": "n1",
+      "type": "narrative",
+      "label": "The Selfless Caregiver",
+      "description": "Carrying the entire burden of caretaking alone while suppressing personal needs.",
+      "summary": [
+        "Expected Daniel to understand and share the caretaking load without explicitly asking previously.",
+        "Felt deep shame after yelling at her mother because she believes she should always be a calm caregiver."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 7,
+          "text": "Nobody asked me what I wanted! You decided and I went along with it because that's what I do!"
+        }
+      ]
+    },
+    {
+      "temp_id": "n2",
+      "type": "narrative",
+      "label": "Inherited Coping Patterns",
+      "description": "Unconsciously repeating family histories of alcohol use to numb painful emotions.",
+      "summary": [
+        "Finished an entire bottle of wine after the argument with Daniel and her mother.",
+        "Noticed she sits in the exact same chair and does the same thing her father used to do."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 43,
+          "text": "And now I'm sitting in the same kitchen he sat in, doing the same thing."
+        }
+      ]
+    },
+    {
+      "temp_id": "n3",
+      "type": "narrative",
+      "label": "The Invisible Anger",
+      "description": "Holding in months of resentment until it erupts into explosive outbursts.",
+      "summary": [
+        "Described the outburst as months of pressure finding the smallest crack.",
+        "Felt torn between apologizing for yelling and standing by the truth of her anger."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 19,
+          "text": "It came out of nowhere, but it didn't come out of nowhere at all."
+        }
+      ]
+    },
+    {
+      "temp_id": "n4",
+      "type": "belief",
+      "label": "Apologizing Takes Everything Back",
+      "description": "Assuming that expressing regret invalidates the truth of one's feelings.",
+      "summary": [
+        "Expressed fear that apologizing to Daniel meant giving up her valid need for help."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 67,
+          "text": "In my family if you apologize, you take everything back."
+        }
+      ]
+    },
+    {
+      "temp_id": "n5",
+      "type": "belief",
+      "label": "My Outbursts Make Me Bad",
+      "description": "Equating a momentary loss of emotional control with being a terrible person.",
+      "summary": [
+        "Blamed herself entirely for the argument because she yelled in front of her mother."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 13,
+          "text": "I felt awful. Physically, and just... ashamed. Because the whole thing was my fault."
+        }
+      ]
+    },
+    {
+      "temp_id": "n6",
+      "type": "strategy",
+      "label": "Numbing With Wine",
+      "description": "Using alcohol as an evening reward and mechanism to put things down.",
+      "summary": [
+        "Drank a whole bottle of wine alone in the kitchen after the family left.",
+        "Noticed herself anticipating the glass of wine starting as early as 3 p.m."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 41,
+          "text": "Like at 3 p.m. I'll think, 'Just get through till tonight, and then you can have your glass.'"
+        }
+      ]
+    },
+    {
+      "temp_id": "n7",
+      "type": "strategy",
+      "label": "Passive Acquiescence",
+      "description": "Going along with decisions made by others without voicing personal desires.",
+      "summary": [
+        "Recognized that she often goes along with decisions rather than voicing her own needs."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 7,
+          "text": "You decided and I went along with it because that's what I do!"
+        }
+      ]
+    },
+    {
+      "temp_id": "n8",
+      "type": "strategy",
+      "label": "Walking Before Wine",
+      "description": "Introducing a gentle physical pause before resorting to alcohol use.",
+      "summary": [
+        "Agreed to try taking a walk around the block after her mother is in bed before opening wine."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 83,
+          "text": "Maybe... I could go for a walk after Mom's in bed. Not a run... But a walk around the block."
+        }
+      ]
+    },
+    {
+      "temp_id": "n9",
+      "type": "need",
+      "label": "Recognition and Being Seen",
+      "description": "Longing to have one's hard work and emotional reality acknowledged by others.",
+      "summary": [
+        "Expressed a deep desire for her brother to acknowledge how hard caretaking is for her.",
+        "Connected her emotional pain directly to the lack of being seen by her partner."
+      ],
+      "need_category": "Identity",
+      "quotes": [
+        {
+          "utterance_index": 25,
+          "text": "I want him to say, 'This is hard, and I see that you're doing most of it.'"
+        }
+      ]
+    },
+    {
+      "temp_id": "n10",
+      "type": "need",
+      "label": "Rest and Restoration",
+      "description": "Needing physical and mental breaks from relentless caregiving duties.",
+      "summary": [
+        "Proposed a respite program to secure one weekend a month away from caretaking.",
+        "Reflected on past creative hobbies like pottery where her hands were busy and brain stopped."
+      ],
+      "need_category": "Rest",
+      "quotes": [
+        {
+          "utterance_index": 3,
+          "text": "Like a weekend a month where Mom stays somewhere with care so I can have a break."
+        }
+      ]
+    },
+    {
+      "temp_id": "n11",
+      "type": "need",
+      "label": "Connection and Partnership",
+      "description": "Longing for genuine companionship and shared support with her sibling.",
+      "summary": [
+        "Expressed deep loneliness and a desire to reconnect with her brother as a sibling."
+      ],
+      "need_category": "Connection",
+      "quotes": [
+        {
+          "utterance_index": 77,
+          "text": "Where we can just be... siblings."
+        }
+      ]
+    },
+    {
+      "temp_id": "n12",
+      "type": "value",
+      "label": "Family Loyalty",
+      "description": "Deep commitment to caring for aging parents and maintaining family bonds.",
+      "summary": [
+        "Dedicates her time and energy to caring for her mother daily despite the immense toll."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 23,
+          "text": "He's the only other person who knows what this is like — he's her son."
+        }
+      ]
+    },
+    {
+      "temp_id": "n13",
+      "type": "value",
+      "label": "Authenticity and Honesty",
+      "description": "Valuing emotional truth and clear communication over keeping the peace.",
+      "summary": [
+        "Realized that separating her apology from her truth felt clean and honest."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 71,
+          "text": "Scary. But clean, somehow. Like it's the actual truth."
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source_temp_id": "n9",
+      "target_temp_id": "n1",
+      "explanation": "Her need to be seen by Daniel clashes with her narrative of silently carrying everything alone."
+    },
+    {
+      "source_temp_id": "n6",
+      "target_temp_id": "n2",
+      "explanation": "Using wine to cope directly feeds into her painful narrative of repeating her father's drinking habits."
+    },
+    {
+      "source_temp_id": "n3",
+      "target_temp_id": "n1",
+      "explanation": "Her hidden anger builds up precisely because she lives by the selfless caregiver narrative."
+    },
+    {
+      "source_temp_id": "n4",
+      "target_temp_id": "n1",
+      "explanation": "Believing she cannot apologize without taking everything back reinforces her pattern of self-silencing."
+    },
+    {
+      "source_temp_id": "n5",
+      "target_temp_id": "n1",
+      "explanation": "Her intense shame stems from failing her own impossible standard as a selfless caregiver."
+    },
+    {
+      "source_temp_id": "n7",
+      "target_temp_id": "n1",
+      "explanation": "Quietly going along with decisions is the behavioral manifestation of her caregiver narrative."
+    },
+    {
+      "source_temp_id": "n8",
+      "target_temp_id": "n2",
+      "explanation": "Taking a walk before drinking is a new strategy designed to interrupt her inherited drinking pattern."
+    },
+    {
+      "source_temp_id": "n10",
+      "target_temp_id": "n1",
+      "explanation": "Wanting rest and respite directly challenges her narrative of enduring all caretaking tasks alone."
+    },
+    {
+      "source_temp_id": "n11",
+      "target_temp_id": "n1",
+      "explanation": "Her loneliness and desire for partnership highlight the isolated reality of her caregiving role."
+    },
+    {
+      "source_temp_id": "n12",
+      "target_temp_id": "n1",
+      "explanation": "Her deep commitment to family loyalty compels her to remain in the selfless caregiver role."
+    },
+    {
+      "source_temp_id": "n13",
+      "target_temp_id": "n3",
+      "explanation": "Valuing authenticity helps her find a way to honor her anger rather than keeping it hidden."
+    }
+  ]
+}

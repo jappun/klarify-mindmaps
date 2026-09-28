@@ -1,0 +1,280 @@
+{
+  "nodes": [
+    {
+      "temp_id": "n1",
+      "type": "narrative",
+      "label": "The Selfless Caregiver",
+      "description": "Believing I must bear my mother's decline completely alone.",
+      "summary": [
+        "Carried the burden of caregiving entirely by herself initially.",
+        "Felt isolated in the experience of losing her mother."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 39,
+          "text": "Like I'm not holding the whole thing by myself."
+        }
+      ]
+    },
+    {
+      "temp_id": "n2",
+      "type": "narrative",
+      "label": "The Invisible Anger",
+      "description": "Holding deep resentment that went unexpressed for years.",
+      "summary": [
+        "Expressed past anger toward her brother at the diner.",
+        "Noticed feeling less angry after finally talking."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 19,
+          "text": "It made me less angry. Not all the way. But a lot."
+        }
+      ]
+    },
+    {
+      "temp_id": "n3",
+      "type": "narrative",
+      "label": "Anticipatory Loss",
+      "description": "Mourning a mother who is physically present but psychologically slipping away.",
+      "summary": [
+        "Faced the devastating reality of her mother not recognizing her.",
+        "Described the experience of ambiguous loss and hundred small goodbyes."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 68,
+          "text": "There's just a hundred small goodbyes."
+        }
+      ]
+    },
+    {
+      "temp_id": "n4",
+      "type": "belief",
+      "label": "Expressing Pain Burdens Others",
+      "description": "Assuming that sharing difficult feelings will cause rejection or conflict.",
+      "summary": [
+        "Feared Daniel would not respond or would push her away when she reached out.",
+        "Initially kept her grief hidden to avoid worsening the situation."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 7,
+          "text": "He didn't answer for like a whole day, and I was sure I'd made it worse."
+        }
+      ]
+    },
+    {
+      "temp_id": "n5",
+      "type": "belief",
+      "label": "Avoiding Hard Feelings",
+      "description": "Believing that difficult emotions can and should be numbed away.",
+      "summary": [
+        "Used three to four glasses of wine to escape the pain of her mother not recognizing her."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 51,
+          "text": "I don't think wanting to not feel it was crazy."
+        }
+      ]
+    },
+    {
+      "temp_id": "n6",
+      "type": "strategy",
+      "label": "Walking Before Wine",
+      "description": "Using physical movement to help transition and reduce the urge to drink.",
+      "summary": [
+        "Completed four nights of walking instead of drinking.",
+        "Found that the walk successfully helped her put the stress down on some nights."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 43,
+          "text": "The walk kind of did the thing. The putting-it-down thing."
+        }
+      ]
+    },
+    {
+      "temp_id": "n7",
+      "type": "strategy",
+      "label": "Reaching Out for Support",
+      "description": "Initiating vulnerable conversations with family instead of isolating.",
+      "summary": [
+        "Invited her brother Daniel for coffee to share her needs.",
+        "Planned to call Daniel instead of turning to alcohol on hard nights."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 11,
+          "text": "I need help, and I need you to hear me."
+        }
+      ]
+    },
+    {
+      "temp_id": "n8",
+      "type": "strategy",
+      "label": "Numbing with Wine",
+      "description": "Drinking alcohol to escape intense emotional pain.",
+      "summary": [
+        "Drank heavily on the worst night when her mother did not recognize her."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 47,
+          "text": "And that night I skipped the walk and I had three glasses."
+        }
+      ]
+    },
+    {
+      "temp_id": "n9",
+      "type": "need",
+      "label": "Rest and Restoration",
+      "description": "Needing physical and mental downtime to recover from burnout.",
+      "summary": [
+        "Slept eight hours straight after getting her Saturday back.",
+        "Experienced the restorative benefit of having unassigned personal time."
+      ],
+      "need_category": "Rest",
+      "quotes": [
+        {
+          "utterance_index": 3,
+          "text": "I slept eight hours last night. I don't remember the last time that happened."
+        }
+      ]
+    },
+    {
+      "temp_id": "n10",
+      "type": "need",
+      "label": "Connection and Shared Burden",
+      "description": "Longing for empathy and partnership in facing family hardship.",
+      "summary": [
+        "Reconnected deeply with her brother over shared grief and childhood memories.",
+        "Felt significantly less alone after talking with Daniel."
+      ],
+      "need_category": "Connection",
+      "quotes": [
+        {
+          "utterance_index": 21,
+          "text": "We laughed. We haven't laughed together in years."
+        }
+      ]
+    },
+    {
+      "temp_id": "n11",
+      "type": "need",
+      "label": "Autonomy and Personal Time",
+      "description": "Needing space and time that belongs entirely to oneself.",
+      "summary": [
+        "Claimed every other Saturday as her own day without caregiving duties.",
+        "Signed up for a pottery class to pursue personal interests."
+      ],
+      "need_category": "Autonomy",
+      "quotes": [
+        {
+          "utterance_index": 27,
+          "text": "That's the day that's mine."
+        }
+      ]
+    },
+    {
+      "temp_id": "n12",
+      "type": "value",
+      "label": "Family and Loyalty",
+      "description": "Deep commitment to caring for aging parents and supporting relatives.",
+      "summary": [
+        "Committed to loving her mother even through memory loss and decline.",
+        "Collaborated with her brother to share caregiving responsibilities."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 65,
+          "text": "And I'll still have to love her like she's my mom."
+        }
+      ]
+    },
+    {
+      "temp_id": "n13",
+      "type": "value",
+      "label": "Honesty and Authenticity",
+      "description": "Valuing truthfulness in relationships and self-reflection.",
+      "summary": [
+        "Confessed openly about her heavy drinking night without lying to the therapist.",
+        "Spoke her honest feelings directly to her brother."
+      ],
+      "need_category": null,
+      "quotes": [
+        {
+          "utterance_index": 47,
+          "text": "I'm not going to lie to you."
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source_temp_id": "n4",
+      "target_temp_id": "n1",
+      "explanation": "Believing her pain would burden others reinforced her pattern of handling everything alone."
+    },
+    {
+      "source_temp_id": "n7",
+      "target_temp_id": "n1",
+      "explanation": "Reaching out to her brother directly challenges and breaks her narrative of solitary caregiving."
+    },
+    {
+      "source_temp_id": "n8",
+      "target_temp_id": "n1",
+      "explanation": "Drinking heavily was a way to cope with the overwhelming isolation of the caregiving narrative."
+    },
+    {
+      "source_temp_id": "n6",
+      "target_temp_id": "n1",
+      "explanation": "Taking walks provided an adaptive alternative to carry the weight previously held alone."
+    },
+    {
+      "source_temp_id": "n2",
+      "target_temp_id": "n3",
+      "explanation": "Her lingering anger is closely intertwined with the painful grief of losing her mother."
+    },
+    {
+      "source_temp_id": "n5",
+      "target_temp_id": "n3",
+      "explanation": "She used wine as an escape from the unbearable reality defined by anticipatory loss."
+    },
+    {
+      "source_temp_id": "n9",
+      "target_temp_id": "n1",
+      "explanation": "Resting and sleeping well directly counteract the burnout of the selfless caregiver narrative."
+    },
+    {
+      "source_temp_id": "n10",
+      "target_temp_id": "n1",
+      "explanation": "Gaining connection with Daniel directly alleviates the isolation of the lone caregiver narrative."
+    },
+    {
+      "source_temp_id": "n11",
+      "target_temp_id": "n1",
+      "explanation": "Reclaiming Saturdays for herself helps dismantle the narrative that her life belongs entirely to her mother."
+    },
+    {
+      "source_temp_id": "n12",
+      "target_temp_id": "n3",
+      "explanation": "Her deep commitment to her mother makes the anticipatory grief all the more profound."
+    },
+    {
+      "source_temp_id": "n13",
+      "target_temp_id": "n2",
+      "explanation": "Honesty with her therapist and brother allowed her to release hidden anger and find relief."
+    }
+  ]
+}
