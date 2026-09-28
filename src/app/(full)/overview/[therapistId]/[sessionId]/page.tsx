@@ -5,7 +5,8 @@ import { NOT_IN_DEMO } from "@/lib/config";
 import { ReflectionsTab } from "@/components/session/reflections-tab";
 import { SessionMindmapTab } from "@/components/session/session-mindmap-tab";
 import { QuestionsProvider } from "@/lib/client/questions-store";
-import { getClientGraph, getSession } from "@/lib/server/queries";
+import { ProcessingPanel } from "@/components/session/processing-panel";
+import { getClientGraph, getResumeStep, getSession } from "@/lib/server/queries";
 import { clientHref, sessionHref, type SessionTab } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +29,10 @@ export default async function SessionPage({ params, searchParams }: PageProps<"/
 
   const session = await getSession(sessionId);
   if (!session) notFound();
-  const graph = session.status === "ready" ? await getClientGraph(session.client_id) : null;
+  const [graph, resumeStep] =
+    session.status === "ready"
+      ? [await getClientGraph(session.client_id), null]
+      : [null, await getResumeStep(session.id)];
 
   return (
     <div className="flex h-full flex-col px-10 pt-8">
@@ -62,10 +66,7 @@ export default async function SessionPage({ params, searchParams }: PageProps<"/
 
       <div className="-mx-8 flex min-h-0 flex-1 flex-col pt-8 pb-2">
         {!graph ? (
-          <div className="flex flex-1 items-center justify-center text-klarify-neutral-500 text-sm">
-            {/* TODO(phase 8): processing / failed states */}
-            This session is still processing.
-          </div>
+          <ProcessingPanel sessionId={session.id} status={session.status} resumeStep={resumeStep ?? "extract"} />
         ) : (
           <QuestionsProvider initial={graph.questions}>
             {tab === "mindmap" ? (

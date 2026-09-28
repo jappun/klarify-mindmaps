@@ -19,6 +19,6 @@ function friendlyError(err: unknown) {
   const msg = err instanceof Error ? err.message : String(err);
   if (/timeout|aborted/i.test(msg)) return "The AI model took too long to respond.";
   if (/validation/i.test(msg)) return "The AI model returned something we couldn't use.";
-  if (/429|quota|rate/i.test(msg)) return "The AI model is busy right now.";
+  if (/429|503|quota|rate|UNAVAILABLE|high demand|overloaded/i.test(msg)) return "The AI model is busy right now. Please retry in a moment.";
   return "Something went wrong while processing this session.";
 }

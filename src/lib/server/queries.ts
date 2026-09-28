@@ -7,6 +7,7 @@ import type {
   GraphNode,
   NodeType,
   Occurrence,
+  PipelineStep,
   ReflectionQuestion,
   Session,
   SessionWithClient,
@@ -177,4 +178,16 @@ export async function getClientGraph(clientId: string): Promise<ClientGraph | nu
     edges,
     questions: must(qRes, "graph questions") as ReflectionQuestion[],
   };
+}
+
+/** Where a processing/failed session should resume: the failed step, or the first step without output. */
+export async function getResumeStep(sessionId: string): Promise<PipelineStep> {
+  const s = must(
+    await db().from("sessions").select("failed_step, extraction").eq("id", sessionId).single(),
+    "resume step",
+  ) as { failed_step: PipelineStep | null; extraction: unknown };
+  if (s.failed_step) return s.failed_step;
+  if (!s.extraction) return "extract";
+  const { count } = await db().from("node_occurrences").select("id", { count: "exact", head: true }).eq("session_id", sessionId);
+  return count ? "reflections" : "merge";
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { RecordModal } from "@/components/record/record-modal";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -22,7 +23,7 @@ import { SearchInput } from "@/components/ui/search-input";
 import { NOT_IN_DEMO } from "@/lib/config";
 import { formatDayHeader, formatNumericDate, formatTime, sessionTitle } from "@/lib/format";
 import { sessionHref } from "@/lib/routes";
-import type { SessionWithClient } from "@/lib/types";
+import type { ClientSummary, SessionWithClient } from "@/lib/types";
 
 const RECORD_OPTIONS = [
   { title: "Record virtual session", body: "For web-based platforms like Jane, Owl, and others.", icon: Disc },
@@ -32,13 +33,23 @@ const RECORD_OPTIONS = [
 
 export function RecordsView({
   sessions,
-  onUploadText,
+  clients,
+  openUpload = false,
+  uploadClientId,
 }: {
   sessions: SessionWithClient[];
-  onUploadText?: () => void;
+  clients: ClientSummary[];
+  openUpload?: boolean;
+  uploadClientId?: string;
 }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const [uploadOpen, setUploadOpen] = useState(openUpload);
+  const setUpload = (open: boolean) => {
+    setUploadOpen(open);
+    // Drop ?upload=1 so a refresh doesn't reopen the modal.
+    if (!open && openUpload) router.replace("/dashboard");
+  };
 
   const groups = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -111,7 +122,7 @@ export function RecordsView({
                   </DropdownMenuTrigger>
                   {/* TODO: verify against Klarify — menu items inferred from Klarify's i18n strings. */}
                   <DropdownMenuContent align="start">
-                    <DropdownMenuItem onSelect={() => onUploadText?.()}>
+                    <DropdownMenuItem onSelect={() => setUpload(true)}>
                       <FilePen /> Upload text
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => router.push(NOT_IN_DEMO)}>
@@ -145,6 +156,7 @@ export function RecordsView({
           </div>
         </div>
       </div>
+      <RecordModal open={uploadOpen} onOpenChange={setUpload} clients={clients} defaultClientId={uploadClientId} />
     </div>
   );
 }

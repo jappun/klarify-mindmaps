@@ -86,16 +86,18 @@ async function callModel(prompt: string, schema: z.ZodType): Promise<string> {
     if (hit) return hit;
   }
 
-  const res = await client().models.generateContent({
-    model,
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseJsonSchema: jsonSchemaFor(schema),
-      temperature: 0.2,
-      abortSignal: AbortSignal.timeout(CALL_TIMEOUT_MS),
-    },
-  });
+  const res = await withTransientRetry(() =>
+    client().models.generateContent({
+      model,
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseJsonSchema: jsonSchemaFor(schema),
+        temperature: 0.2,
+        abortSignal: AbortSignal.timeout(CALL_TIMEOUT_MS),
+      },
+    }),
+  );
   const text = res.text;
   if (!text) throw new LlmError(`Empty response from ${model} (finish: ${res.candidates?.[0]?.finishReason ?? "unknown"})`);
 
@@ -104,4 +106,20 @@ async function callModel(prompt: string, schema: z.ZodType): Promise<string> {
     await writeFile(join(cacheDir, `${key}.json`), text);
   }
   return text;
+}
+
+const TRANSIENT = /\b(429|500|502|503|504)\b|UNAVAILABLE|RESOURCE_EXHAUSTED|overloaded|high demand|ECONNRESET|fetch failed/i;
+
+/** Retry rate limits / overloads / network blips with backoff (1.5s, 4s). Validation retries are separate. */
+async function withTransientRetry<T>(fn: () => Promise<T>, delays = [1500, 4000]): Promise<T> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (attempt >= delays.length || !TRANSIENT.test(msg)) throw err;
+      console.warn(`[llm] transient error, retrying in ${delays[attempt]}ms: ${msg.slice(0, 160)}`);
+      await new Promise((r) => setTimeout(r, delays[attempt]));
+    }
+  }
 }
