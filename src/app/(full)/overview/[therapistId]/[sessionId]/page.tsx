@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { NOT_IN_DEMO } from "@/lib/config";
-import { getSession } from "@/lib/server/queries";
+import { SessionMindmapTab } from "@/components/session/session-mindmap-tab";
+import { getClientGraph, getSession } from "@/lib/server/queries";
 import { clientHref, sessionHref, type SessionTab } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,7 @@ export default async function SessionPage({ params, searchParams }: PageProps<"/
 
   const session = await getSession(sessionId);
   if (!session) notFound();
+  const graph = session.status === "ready" ? await getClientGraph(session.client_id) : null;
 
   return (
     <div className="flex h-full flex-col px-10 pt-8">
@@ -56,11 +58,14 @@ export default async function SessionPage({ params, searchParams }: PageProps<"/
         })}
       </nav>
 
-      <div className="flex min-h-0 flex-1 flex-col pt-8">
-        {tab === "mindmap" ? (
-          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed text-klarify-neutral-500 text-sm">
-            Session mindmap — build step 4
+      <div className="-mx-8 flex min-h-0 flex-1 flex-col pt-8 pb-2">
+        {!graph ? (
+          <div className="flex flex-1 items-center justify-center text-klarify-neutral-500 text-sm">
+            {/* TODO(phase 8): processing / failed states */}
+            This session is still processing.
           </div>
+        ) : tab === "mindmap" ? (
+          <SessionMindmapTab graph={graph} sessionId={session.id} />
         ) : (
           <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed text-klarify-neutral-500 text-sm">
             Reflection questions — build step 7
