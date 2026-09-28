@@ -1,0 +1,175 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+ * Design tokens extracted from Klarify's saved pages (webpages/*_files/1m34g36pccgig.css).
+ * Klarify is shadcn/ui + Tailwind v4; names below mirror theirs so class strings can be reused verbatim.
+ */
+
+:root {
+  --background: #fff;
+  --foreground: #000;
+  --card: #fff;
+  --card-foreground: #000;
+  --popover: #fff;
+  --popover-foreground: #000;
+  --primary: #00464a;
+  --primary-foreground: #fff;
+  --secondary: #e5e7eb;
+  --secondary-foreground: #000;
+  --muted: #f6f6f6;
+  --muted-foreground: #737373;
+  --accent: #f6f6f6;
+  --accent-foreground: #000;
+  --destructive: #ec0040;
+  --destructive-foreground: #fff;
+  --border: #eaecef;
+  --input: #eaecef;
+  --ring: #000;
+  --radius: 0.75rem;
+}
+
+@theme inline {
+  --font-sans: var(--font-switzer), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@theme {
+  /* Sidebar */
+  --color-sidebar-hover: #f0f0f0;
+  --color-sidebar-muted: #737373;
+  --color-sidebar-selected: #364153;
+
+  --shadow-custom: 0px 0.5px 1px 0px #00000014, 0px 1px 2px 0px #0000000f, 0px 2px 4px 0px #0000000a;
+
+  --color-klarify-cloud-50: #f6f6f6;
+  --color-klarify-cloud-100: #f0f0f0;
+  --color-klarify-cloud-200: #e2e2e2;
+  --color-klarify-cloud-300: #e0e0e0;
+  --color-klarify-cloud-400: #cfcfcf;
+  --color-klarify-cloud-500: #bfbfbf;
+  --color-klarify-cloud-700: #999;
+  --color-klarify-cloud-800: #7a7a7a;
+  --color-klarify-cloud-900: #5a5a5a;
+
+  --color-klarify-cream-50: #edeae3;
+
+  --color-klarify-forest-50: #e6f4ec;
+  --color-klarify-forest-100: #cde4d1;
+  --color-klarify-forest-200: #add2b4;
+  --color-klarify-forest-300: #9cbf97;
+  --color-klarify-forest-400: #78b284;
+  --color-klarify-forest-500: #78c091;
+  --color-klarify-forest-600: #5da174;
+  --color-klarify-forest-700: #4a8560;
+  --color-klarify-forest-800: #39694d;
+  --color-klarify-forest-900: #2a4e3a;
+  --color-klarify-forest-950: #1b3427;
+
+  --color-klarify-neutral-50: #fafafa;
+  --color-klarify-neutral-100: #f5f5f5;
+  --color-klarify-neutral-200: #e5e5e5;
+  --color-klarify-neutral-300: #d4d4d4;
+  --color-klarify-neutral-400: #a1a1a1;
+  --color-klarify-neutral-500: #737373;
+  --color-klarify-neutral-600: #525252;
+  --color-klarify-neutral-700: #404040;
+  --color-klarify-neutral-800: #262626;
+  --color-klarify-neutral-900: #171717;
+  --color-klarify-neutral-950: #0a0a0b;
+
+  --color-klarify-ocean-50: #e0ebec;
+  --color-klarify-ocean-100: #b3ced0;
+  --color-klarify-ocean-200: #86adb0;
+  --color-klarify-ocean-300: #4d8b91;
+  --color-klarify-ocean-400: #266f78;
+  --color-klarify-ocean-500: #00464a;
+  --color-klarify-ocean-600: #003f43;
+  --color-klarify-ocean-700: #00363a;
+  --color-klarify-ocean-800: #002d31;
+  --color-klarify-ocean-900: #001e21;
+  --color-klarify-ocean-950: #001417;
+
+  --color-klarify-peach-50: #fff3ed;
+  --color-klarify-peach-100: #ffe1d3;
+  --color-klarify-peach-200: #ffc3ab;
+  --color-klarify-peach-300: #ffa785;
+  --color-klarify-peach-400: #ff9666;
+  --color-klarify-peach-500: #f07e52;
+  --color-klarify-peach-600: #d1673f;
+  --color-klarify-peach-700: #ad5031;
+  --color-klarify-peach-800: #8a3d25;
+  --color-klarify-peach-900: #6b2c1b;
+
+  --color-klarify-rose-50: #fef1f2;
+  --color-klarify-rose-100: #ffe4e8;
+  --color-klarify-rose-200: #ffccd3;
+  --color-klarify-rose-300: #ffb3bf;
+  --color-klarify-rose-400: #ff637e;
+  --color-klarify-rose-500: #ff1f57;
+  --color-klarify-rose-600: #ec0040;
+  --color-klarify-rose-700: #c70036;
+  --color-klarify-rose-800: #a50036;
+  --color-klarify-rose-900: #8b0b36;
+
+  /* gray-mod mirrors Tailwind v4 gray (verified: 300/700/800 identical) */
+  --color-klarify-gray-mod-50: #f9fafb;
+  --color-klarify-gray-mod-100: #f3f4f6;
+  --color-klarify-gray-mod-200: #e5e7eb;
+  --color-klarify-gray-mod-300: #d1d5dc;
+  --color-klarify-gray-mod-400: #9aa1ae;
+  --color-klarify-gray-mod-500: #697282;
+  --color-klarify-gray-mod-600: #4a5565;
+  --color-klarify-gray-mod-700: #364153;
+  --color-klarify-gray-mod-800: #1e2938;
+  --color-klarify-gray-mod-900: #101828;
+
+  /* Mindmap node types — Klarify's categoryConfig */
+  --color-node-narrative: #ff6b6b;
+  --color-node-belief: #4ecdc4;
+  --color-node-strategy: #45b7d1;
+  --color-node-need: #96ceb4;
+  --color-node-value: #feca57;
+  /* "From other sessions": derived from Klarify's cloud grays */
+  --color-node-other: #e0e0e0;
+  --color-node-other-stroke: #cfcfcf;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
