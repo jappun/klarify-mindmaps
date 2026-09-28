@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ClipboardList, FileText, FolderOpen, Map, MessageSquare, ShieldCheck, User } from "lucide-react";
+import { ClientMindmapTab } from "@/components/clients/client-mindmap-tab";
 import { ClientSessionList } from "@/components/clients/client-session-list";
 import { RecordSessionMenu } from "@/components/clients/record-session-menu";
 import { NOT_IN_DEMO } from "@/lib/config";
-import { getClient, listClientSessions } from "@/lib/server/queries";
+import { QuestionsProvider } from "@/lib/client/questions-store";
+import { getClient, getClientGraph, listClientSessions } from "@/lib/server/queries";
 import { formatShortMonthYear } from "@/lib/format";
 import { clientHref, type ClientTab } from "@/lib/routes";
 import { cn } from "@/lib/utils";
@@ -28,7 +30,10 @@ export default async function ClientPage({ params, searchParams }: PageProps<"/c
 
   const client = await getClient(clientId);
   if (!client) notFound();
-  const sessions = await listClientSessions(clientId);
+  const [sessions, graph] = await Promise.all([
+    listClientSessions(clientId),
+    tab === "mindmap" ? getClientGraph(clientId) : null,
+  ]);
 
   return (
     <div className="flex h-full flex-col px-3 py-2">
@@ -60,7 +65,7 @@ export default async function ClientPage({ params, searchParams }: PageProps<"/c
         <RecordSessionMenu clientId={client.id} />
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 px-8 pt-6">
+      <div className="flex min-h-0 flex-1 flex-col gap-4 px-8 pt-6">
         <nav className="inline-flex h-11 w-fit items-center gap-1 rounded-lg bg-klarify-neutral-100 p-1 text-klarify-neutral-600">
           {TABS.map((t) => {
             const active = "tab" in t && t.tab === tab;
@@ -83,9 +88,11 @@ export default async function ClientPage({ params, searchParams }: PageProps<"/c
         {tab === "sessions" ? (
           <ClientSessionList sessions={sessions} />
         ) : (
-          <div className="flex min-h-[480px] flex-1 items-center justify-center rounded-lg border border-dashed text-klarify-neutral-500 text-sm">
-            Client mindmap — build step 6
-          </div>
+          graph && (
+            <QuestionsProvider initial={graph.questions}>
+              <ClientMindmapTab graph={graph} />
+            </QuestionsProvider>
+          )
         )}
       </div>
     </div>

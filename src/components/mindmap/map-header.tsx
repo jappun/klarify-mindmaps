@@ -10,22 +10,22 @@ const notInDemo = () => toast("Not in this demo");
 export function MapHeader({ title }: { title: string }) {
   return (
     <div className="flex items-center justify-between gap-4 border-klarify-neutral-200 border-b px-6 pb-4">
-      <h2 className="truncate text-klarify-neutral-700 text-lg">{title}</h2>
-      <div className="flex shrink-0 items-center gap-3">
-        <Button variant="outline" className="h-11 gap-2 px-5 text-base" onClick={notInDemo}>
+      <h2 className="min-w-0 truncate text-klarify-neutral-700 text-lg">{title}</h2>
+      <div className="flex shrink-0 items-center gap-3 [&>button]:px-4 2xl:[&>button]:px-5">
+        <Button variant="outline" className="h-11 gap-2 text-base" onClick={notInDemo}>
           <Save size={18} /> Save Node Positions
         </Button>
-        <Button variant="outline" className="h-11 gap-2 px-5 text-base" onClick={notInDemo}>
+        <Button variant="outline" className="h-11 gap-2 text-base" onClick={notInDemo}>
           <Download size={18} /> Download Image
         </Button>
         <Button
           variant="outline"
-          className="h-11 gap-2 border-klarify-rose-100 px-5 text-base text-klarify-rose-600 hover:bg-klarify-rose-50"
+          className="h-11 gap-2 border-klarify-rose-100 text-base text-klarify-rose-600 hover:bg-klarify-rose-50"
           onClick={notInDemo}
         >
           <Trash2 size={18} /> Delete Mindmap
         </Button>
-        <Button className="h-11 gap-2 px-5 text-base" onClick={notInDemo}>
+        <Button className="h-11 gap-2 text-base" onClick={notInDemo}>
           <Share2 size={18} /> Share
         </Button>
       </div>
