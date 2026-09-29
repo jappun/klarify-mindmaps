@@ -14,10 +14,12 @@ const STORAGE_KEY = "mindmap-legend-collapsed";
 export function MindmapLegend({
   hidden,
   onToggle,
+  showNew = false,
   showOtherSessions = false,
 }: {
   hidden?: Set<NodeType>;
   onToggle?: (type: NodeType) => void;
+  showNew?: boolean;
   showOtherSessions?: boolean;
 }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -95,7 +97,7 @@ export function MindmapLegend({
             </button>
           );
         })}
-        {showOtherSessions && (
+        {showNew && (
           <div className="flex items-center gap-2 border-klarify-gray-mod-200 border-t pt-2">
             <div
               className="h-3 w-3 shrink-0 rounded-full bg-white"
@@ -105,7 +107,7 @@ export function MindmapLegend({
           </div>
         )}
         {showOtherSessions && (
-          <div className="flex max-w-40 items-start gap-2">
+          <div className={cn("flex max-w-40 items-start gap-2", !showNew && "border-klarify-gray-mod-200 border-t pt-2")}>
             <div
               className="mt-0.5 h-3 w-3 shrink-0 rounded-full border"
               style={{ backgroundColor: OTHER_SESSION_FILL, borderColor: OTHER_SESSION_STROKE }}

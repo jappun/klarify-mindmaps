@@ -4,7 +4,7 @@ import type { ClientGraph, GraphEdge, GraphNode, Session } from "../types";
 export type SessionNode = GraphNode & {
   /** Appears in the session being viewed. */
   inSession: boolean;
-  /** First appearance is the session being viewed. */
+  /** First appearance is the session being viewed (never true on a client's first session). */
   isNew: boolean;
   /** Session numbers (≤ current) this node appeared in. */
   sessionNumbers: number[];
@@ -15,6 +15,8 @@ export type SessionModel = {
   nodes: SessionNode[];
   edges: GraphEdge[];
   sessionNumber: Map<string, number>;
+  /** An earlier session exists, so "new" and "from other sessions" mean something. */
+  hasEarlier: boolean;
 };
 
 /**
@@ -27,6 +29,7 @@ export function buildSessionModel(graph: ClientGraph, sessionId: string): Sessio
   const sessionNumber = new Map(graph.sessions.map((s) => [s.id, s.session_number]));
   const current = session.session_number;
   const upTo = (id: string) => (sessionNumber.get(id) ?? Infinity) <= current;
+  const hasEarlier = graph.sessions.some((s) => s.session_number < current);
 
   const nodes: SessionNode[] = graph.nodes
     .map((n) => {
@@ -34,7 +37,7 @@ export function buildSessionModel(graph: ClientGraph, sessionId: string): Sessio
       return {
         ...n,
         inSession: n.occurrences.some((o) => o.session_id === sessionId),
-        isNew: nums.length > 0 && Math.min(...nums) === current,
+        isNew: hasEarlier && nums.length > 0 && Math.min(...nums) === current,
         sessionNumbers: nums,
       };
     })
@@ -44,7 +47,7 @@ export function buildSessionModel(graph: ClientGraph, sessionId: string): Sessio
   const edges = graph.edges.filter(
     (e) => visible.has(e.source) && visible.has(e.target) && e.session_ids.some((id) => upTo(id)),
   );
-  return { session, nodes, edges, sessionNumber };
+  return { session, nodes, edges, sessionNumber, hasEarlier };
 }
 
 export function neighborsOf(id: string, edges: GraphEdge[]) {

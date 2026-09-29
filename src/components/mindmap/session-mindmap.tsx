@@ -203,7 +203,7 @@ export function SessionMindmap({
               <b className="font-medium text-klarify-gray-mod-800">Small gray nodes</b> are from earlier sessions — hover
               to see what they are.
             </>,
-            "A yellow halo marks themes that came up for the first time in this session.",
+            ...(model.hasEarlier ? ["A yellow halo marks themes that came up for the first time in this session."] : []),
             "Click a colored node to focus on it and everything it connects to, across all sessions.",
             "In focus, click any node again to open its details.",
             "Press Esc or the back arrow to return to the full map.",
@@ -212,7 +212,7 @@ export function SessionMindmap({
         />
       </div>
       <div className="absolute right-4 bottom-4">
-        <MindmapLegend hidden={hidden} onToggle={toggleType} showOtherSessions />
+        <MindmapLegend hidden={hidden} onToggle={toggleType} showNew={model.hasEarlier} showOtherSessions={model.hasEarlier} />
       </div>
     </MindmapCanvas>
   );

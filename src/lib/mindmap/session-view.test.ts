@@ -45,6 +45,12 @@ describe("buildSessionModel", () => {
     expect(byId.get("a")).toMatchObject({ inSession: false, isNew: false, sessionNumbers: [1] });
   });
 
+  it("nothing is marked new on the client's first session", () => {
+    const m = buildSessionModel(graph, "S1")!;
+    expect(m.hasEarlier).toBe(false);
+    expect(m.nodes.every((n) => !n.isNew)).toBe(true);
+  });
+
   it("session 3 sees everything; recurring nodes aren't new", () => {
     const m = buildSessionModel(graph, "S3")!;
     expect(m.nodes).toHaveLength(4);
