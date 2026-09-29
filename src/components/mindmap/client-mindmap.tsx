@@ -36,6 +36,14 @@ export function ClientMindmap({
   const recurring = useMemo(() => recurringThemes(graph), [graph]);
   const [mode, setMode] = useState<Mode>("recurring");
   const [focusId, setFocusId] = useState<string | null>(null);
+  const [hidden, setHidden] = useState<Set<NodeType>>(new Set());
+  const toggleType = (type: NodeType) =>
+    setHidden((h) => {
+      const next = new Set(h);
+      if (next.has(type)) next.delete(type);
+      else next.add(type);
+      return next;
+    });
   // One-session clients already see everything, so the toggle has nothing to switch.
   const canToggle = !recurring.showingAll;
   const view = useMemo(
@@ -94,23 +102,29 @@ export function ClientMindmap({
       clickable: true,
     });
 
+    // Type filter hides nodes without moving the rest (the focused node always stays).
+    const shown = (n: GraphNode) => !hidden.has(n.type) || n.id === focusId;
+
     if (!focus) {
-      const ids = new Set(view.nodes.map((n) => n.id));
+      const visible = view.nodes.filter(shown);
+      const ids = new Set(visible.map((n) => n.id));
       return {
-        nodes: view.nodes.map((n) => render(n, basePositions.get(n.id)!)),
+        nodes: visible.map((n) => render(n, basePositions.get(n.id)!)),
         edges: graph.edges
           .filter((e) => ids.has(e.source) && ids.has(e.target))
           .map((e) => ({ id: e.id, source: e.source, target: e.target, opacity: 0.9 })),
       };
     }
 
+    const visible = [focus.center, ...focus.neighbors].filter(shown);
+    const ids = new Set(visible.map((n) => n.id));
     return {
-      nodes: [focus.center, ...focus.neighbors].map((n) => render(n, focus.pos.get(n.id)!)),
+      nodes: visible.map((n) => render(n, focus.pos.get(n.id)!)),
       edges: graph.edges
-        .filter((e) => (e.source === focusId && focus.ids.has(e.target)) || (e.target === focusId && focus.ids.has(e.source)))
+        .filter((e) => (e.source === focusId && ids.has(e.target)) || (e.target === focusId && ids.has(e.source)))
         .map((e) => ({ id: e.id, source: e.source, target: e.target, opacity: 1, width: 1.8 })),
     };
-  }, [view, basePositions, focus, focusId, graph.edges, tooltip]);
+  }, [view, basePositions, focus, focusId, graph.edges, tooltip, hidden]);
 
   const onNodeClick = useCallback(
     (id: string) => {
@@ -148,7 +162,7 @@ export function ClientMindmap({
     <MindmapCanvas
       nodes={frame.nodes}
       edges={frame.edges}
-      fitKey={`${mode}|${focusId ?? "all"}`}
+      fitKey={`${mode}|${focusId ?? "all"}|${[...hidden].sort().join(",")}`}
       onNodeClick={onNodeClick}
       apiRef={canvasApi}
     >
@@ -195,11 +209,12 @@ export function ClientMindmap({
             "Click a node to focus on it and everything it connects to, across all sessions.",
             "In focus, click any node again to open its details.",
             "Press Esc or the back arrow to return.",
+            "Untick a type in the legend to hide it from the map.",
           ]}
         />
       </div>
       <div className="absolute right-4 bottom-4">
-        <MindmapLegend />
+        <MindmapLegend hidden={hidden} onToggle={toggleType} />
       </div>
     </MindmapCanvas>
   );
