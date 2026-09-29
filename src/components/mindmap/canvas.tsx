@@ -19,8 +19,6 @@ export type RenderNode = {
   clickable: boolean;
   /** Soft colored ring around the node (e.g. first appearance in this session). */
   halo?: string;
-  /** Count pill at the node's top-right, e.g. attached-node count. */
-  count?: number;
 };
 
 export type RenderEdge = { id: string; source: string; target: string; opacity: number; width?: number };
@@ -300,16 +298,6 @@ export function MindmapCanvas({
                       ))}
                     </text>
                   )}
-                  {n.count !== undefined && (
-                    <Pill
-                      x={st.r * 0.72}
-                      y={-st.r * 0.72}
-                      anchor="center"
-                      className="border border-border bg-klarify-gray-mod-50 font-medium text-klarify-gray-mod-800"
-                    >
-                      {n.count}
-                    </Pill>
-                  )}
                 </g>
               );
             })}
@@ -332,31 +320,5 @@ export function MindmapCanvas({
 
       {children}
     </div>
-  );
-}
-
-/** Klarify-style pill rendered in world space. */
-function Pill({
-  x,
-  y,
-  anchor,
-  className,
-  children,
-}: {
-  x: number;
-  y: number;
-  anchor: "top" | "bottom" | "center";
-  className: string;
-  children: React.ReactNode;
-}) {
-  const w = 120;
-  const h = 22;
-  const top = anchor === "top" ? y : anchor === "bottom" ? y - h : y - h / 2;
-  return (
-    <foreignObject x={x - w / 2} y={top} width={w} height={h} style={{ overflow: "visible", pointerEvents: "none" }}>
-      <div className="flex h-full items-center justify-center">
-        <span className={`whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] leading-4 shadow-xs ${className}`}>{children}</span>
-      </div>
-    </foreignObject>
   );
 }

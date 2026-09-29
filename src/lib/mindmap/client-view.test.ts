@@ -1,42 +1,49 @@
 import { describe, expect, it } from "vitest";
-import type { ClientGraph, GraphNode, NodeType } from "../types";
-import { buildClientModel } from "./client-view";
+import type { ClientGraph, GraphNode, NodeType, Session } from "../types";
+import { recurringThemes } from "./client-view";
 
-const n = (id: string, type: NodeType, primary: string | null = null): GraphNode => ({
+const session = (n: number): Session => ({
+  id: `S${n}`,
+  client_id: "C",
+  session_number: n,
+  session_date: "2026-09-14",
+  status: "ready",
+  failed_step: null,
+  created_at: "",
+});
+const node = (id: string, sessions: number[], type: NodeType = "belief"): GraphNode => ({
   id,
   type,
   label: id,
   description: "",
   need_category: null,
-  primary_narrative_id: primary,
-  first_session_id: "S1",
-  occurrences: [{ session_id: "S1", summary: [], quotes: [] }],
+  primary_narrative_id: null,
+  first_session_id: `S${sessions[0]}`,
+  occurrences: sessions.map((n) => ({ session_id: `S${n}`, summary: [], quotes: [] })),
 });
-const e = (source: string, target: string) => ({ id: `${source}-${target}`, source, target, explanation: "", session_ids: ["S1"] });
+const edge = (source: string, target: string) => ({ id: `${source}-${target}`, source, target, explanation: "", session_ids: ["S1"] });
 
-const graph: ClientGraph = {
+const graph = (nodes: GraphNode[], sessions = 3): ClientGraph => ({
   client: { id: "C", name: "Nora", created_at: "" },
-  sessions: [],
-  nodes: [n("A", "narrative"), n("B", "narrative"), n("Z", "narrative"), n("x", "belief", "A"), n("y", "need", "A"), n("w", "value")],
-  edges: [e("x", "A"), e("x", "B"), e("y", "A"), e("w", "B")],
+  sessions: Array.from({ length: sessions }, (_, i) => session(i + 1)),
+  nodes,
+  edges: [edge("b", "x"), edge("b", "y"), edge("c", "x")],
   questions: [],
-};
+});
 
-describe("buildClientModel", () => {
-  const m = buildClientModel(graph);
-
-  it("clusters by primary narrative; nodes without one join a connected narrative", () => {
-    expect(m.clusters.get("A")!.map((x) => x.id)).toEqual(["x", "y"]);
-    expect(m.clusters.get("B")!.map((x) => x.id)).toEqual(["w"]);
-    expect(m.clusters.get("Z")).toEqual([]);
+describe("recurringThemes", () => {
+  it("ranks by session count, then connections, then label, and caps the list", () => {
+    const g = graph([node("a", [1]), node("b", [1, 2]), node("c", [1, 3]), node("d", [1, 2, 3]), node("x", [1]), node("y", [2])]);
+    const view = recurringThemes(g, 3);
+    expect(view.nodes.map((n) => n.id)).toEqual(["d", "b", "c"]);
+    expect(view.showingAll).toBe(false);
+    expect(view.sessionCount.get("d")).toBe(3);
   });
 
-  it("members include edge-connected nodes from other clusters", () => {
-    expect(m.members.get("A")!.map((x) => x.id)).toEqual(["x", "y"]);
-    expect(m.members.get("B")!.map((x) => x.id)).toEqual(["w", "x"]);
-  });
-
-  it("links narratives that share an attached node", () => {
-    expect(m.narrativeLinks).toEqual([{ id: "nl:A|B", source: "A", target: "B", weight: 1 }]);
+  it("shows every node for a client with one session", () => {
+    const g = graph([node("a", [1]), node("b", [1]), node("c", [1])], 1);
+    const view = recurringThemes(g, 2);
+    expect(view.nodes).toHaveLength(3);
+    expect(view.showingAll).toBe(true);
   });
 });
