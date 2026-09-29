@@ -2,7 +2,8 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, FilePen, FileText, Plus, Trash, Upload, X } from "lucide-react";
+import { ChevronDown, FilePen, FileText, Plus, Sparkles, Trash, Upload, X } from "lucide-react";
+import { toast } from "sonner";
 import { PipelineProgress } from "./pipeline-progress";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,6 +12,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { usePipeline } from "@/lib/client/use-pipeline";
 import { MAX_TRANSCRIPT_CHARS } from "@/lib/config";
 import { sessionHref } from "@/lib/routes";
+import { SAMPLE_SETS, sampleSessionDate, sampleUrl, type SampleSet } from "@/lib/samples";
 import type { ClientSummary } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -93,6 +95,23 @@ function RecordFlow({
   const { state, start, resume } = usePipeline();
 
   const processing = state.status !== "idle";
+
+  // A sample fills the transcript and pre-fills step 2: its client (existing, or new with the name
+  // filled in) and a date so the sample's sessions fall a week apart ending today.
+  const pickSample = async (set: SampleSet, n: number) => {
+    const res = await fetch(sampleUrl(set, n)).catch(() => null);
+    if (!res?.ok) return void toast.error("That sample isn't available yet.");
+    setText((await res.text()).slice(0, MAX_TRANSCRIPT_CHARS));
+    setFileName(`${set.label} · Session ${n}`);
+    setDate(sampleSessionDate(set, n));
+    const existing = clients.find((c) => c.name.trim().toLowerCase() === set.clientName.toLowerCase());
+    if (existing) setClientId(existing.id);
+    else {
+      setClientId(NEW_CLIENT);
+      setNewName(set.clientName);
+    }
+  };
+
   const clientOk = clientId === NEW_CLIENT ? !!newName.trim() : !!clientId;
 
   const submit = async () => {
@@ -142,7 +161,7 @@ function RecordFlow({
         <div className="mt-6 flex flex-1 flex-col">
           <div className="flex flex-col gap-4">
             <label htmlFor="transcript" className="font-medium text-klarify-neutral-700 text-sm">
-              Paste a session transcript, or upload a .txt file. Each line should start like &ldquo;[4:43] Nora:&rdquo;.
+              Paste a session transcript, or upload a .txt file. Each turn should start with a line like &ldquo;[4:43] Speaker:&rdquo;.
             </label>
             {fileName ? (
               <FileCard name={fileName} chars={text.length} onRemove={() => (setFileName(null), setText(""))} />
@@ -164,6 +183,7 @@ function RecordFlow({
                 />
               </>
             )}
+            <SampleMenu onPick={pickSample} />
           </div>
           <div className="flex-1" />
           <div className="mt-6">
@@ -299,6 +319,36 @@ function ClientSelect({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function SampleMenu({ onPick }: { onPick: (set: SampleSet, n: number) => void }) {
+  return (
+    <div className="flex items-center gap-2 text-klarify-neutral-500 text-sm">
+      <span>Don&apos;t have a transcript?</span>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            className="flex items-center gap-1.5 font-medium text-klarify-ocean-500 underline-offset-2 hover:underline"
+          >
+            <Sparkles size={14} /> Use a sample session <ChevronDown size={14} />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="w-64">
+          {SAMPLE_SETS.map((set) => (
+            <div key={set.id} className="py-1">
+              <p className="px-2 pt-1 pb-1 font-medium text-klarify-neutral-500 text-xs">{set.label}</p>
+              {Array.from({ length: set.sessionCount }, (_, i) => i + 1).map((n) => (
+                <DropdownMenuItem key={n} onSelect={() => onPick(set, n)}>
+                  <FileText /> Session {n}
+                </DropdownMenuItem>
+              ))}
+            </div>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }
 
