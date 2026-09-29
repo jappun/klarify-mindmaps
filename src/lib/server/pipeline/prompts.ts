@@ -38,8 +38,15 @@ Transcript (each line is [#index timestamp] Speaker: text):
 ${transcript}`;
 }
 
-export type MergeExisting = { id: string; type: NodeType; label: string; description: string };
-export type MergeCandidate = { temp_id: string; type: NodeType; label: string; description: string; connects_to: string[] };
+export type MergeExisting = { id: string; type: NodeType; label: string; description: string; summary: string[] };
+export type MergeCandidate = {
+  temp_id: string;
+  type: NodeType;
+  label: string;
+  description: string;
+  summary: string[];
+  connects_to: string[];
+};
 
 export function mergePrompt({ existing, candidates }: { existing: MergeExisting[]; candidates: MergeCandidate[] }) {
   return `You maintain one client's therapy mindmap across sessions. New candidate nodes were extracted from the latest session. Decide, for each candidate, whether it is the same theme as an existing node.
@@ -48,6 +55,9 @@ ${TYPE_DEFINITIONS}
 
 Matching rules:
 - Match when two nodes describe the same underlying theme, even with different wording ("Rest" vs "Rest and Restoration", "Recognition" vs "Recognition and Being Seen", "Caring for Mom" vs "The Dutiful Daughter" if both describe the same story).
+- Use the summaries to judge what each node is really about, not just the labels.
+- Do not match merely because two nodes share a topic. A different way of coping (for example, a healthier alternative that replaces an old habit) is a new strategy, and a belief that contradicts an old one is a new belief.
+- Before choosing "new", check every existing node of the same type. Choose "new" only if the theme is genuinely absent from the map.
 - Only match nodes of the same type.
 - When in doubt, match. Fragmentation across sessions is the problem we are solving.
 - Two candidates may match the same existing node.
@@ -57,7 +67,7 @@ Primary narrative:
 - For every non-narrative candidate (matched or new), set primary_narrative_id to the narrative it belongs to most: either an existing narrative's id or a candidate narrative's temp_id. Prefer a narrative the candidate connects to.
 - For narrative candidates, primary_narrative_id is null.
 
-Existing nodes (JSON):
+Existing nodes (JSON; summary is from the most recent session each appeared in):
 ${JSON.stringify(existing)}
 
 Candidates from the latest session (JSON; connects_to lists candidate temp_ids it has edges with):

@@ -156,18 +156,38 @@ async function runMerge(sessionId: string) {
   const existingEdges = must(edgesRes, "existing edges") as ExistingEdge[];
   const candidates = s.extraction.nodes;
 
+  // Latest summary per existing node, so the model can judge what each theme is really about.
+  const latestSummary = new Map<string, string[]>();
+  if (existingNodes.length) {
+    const occ = must(
+      await db()
+        .from("node_occurrences")
+        .select("node_id, summary, sessions(session_number)")
+        .in("node_id", existingNodes.map((n) => n.id)),
+      "existing summaries",
+    ) as unknown as { node_id: string; summary: string[]; sessions: { session_number: number } }[];
+    for (const o of occ.sort((a, b) => a.sessions.session_number - b.sessions.session_number)) latestSummary.set(o.node_id, o.summary);
+  }
+
   const decisions =
     existingNodes.length === 0
       ? firstSessionDecisions(s.extraction)
       : await generateStructured({
           label: "merge",
           prompt: mergePrompt({
-            existing: existingNodes.map(({ id, type, label, description }) => ({ id, type, label, description })),
+            existing: existingNodes.map(({ id, type, label, description }) => ({
+              id,
+              type,
+              label,
+              description,
+              summary: latestSummary.get(id) ?? [],
+            })),
             candidates: candidates.map((c) => ({
               temp_id: c.temp_id,
               type: c.type,
               label: c.label,
               description: c.description,
+              summary: c.summary,
               connects_to: s.extraction!.edges.flatMap((e) =>
                 e.source_temp_id === c.temp_id ? [e.target_temp_id] : e.target_temp_id === c.temp_id ? [e.source_temp_id] : [],
               ),

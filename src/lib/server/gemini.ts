@@ -1,6 +1,6 @@
 // Gemini structured-output helper. Server-only.
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, utimes, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
@@ -82,8 +82,13 @@ async function callModel(prompt: string, schema: z.ZodType): Promise<string> {
   const key = createHash("sha256").update(`${model}\n${prompt}`).digest("hex").slice(0, 24);
 
   if (cacheDir) {
-    const hit = await readFile(join(cacheDir, `${key}.json`), "utf8").catch(() => null);
-    if (hit) return hit;
+    const file = join(cacheDir, `${key}.json`);
+    const hit = await readFile(file, "utf8").catch(() => null);
+    if (hit) {
+      // Touch on use so the seed script can prune entries no longer referenced.
+      await utimes(file, new Date(), new Date()).catch(() => {});
+      return hit;
+    }
   }
 
   const res = await withTransientRetry(() =>

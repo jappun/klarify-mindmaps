@@ -2,7 +2,7 @@
 //   npm run seed          — seed (fails if Nora already exists)
 //   npm run reset         — wipe all data, then seed
 // LLM responses are cached in data/seed-cache/, so re-seeding with the same model + prompts needs no API calls.
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
 
 process.env.LLM_CACHE_DIR ??= join(process.cwd(), "data/seed-cache");
@@ -76,9 +76,19 @@ async function report(clientId: string) {
   }
 }
 
+/** Remove cache entries this run didn't read or write (left over from older prompts/models). */
+function pruneCache(since: number) {
+  const dir = process.env.LLM_CACHE_DIR!;
+  const stale = readdirSync(dir).filter((f) => statSync(join(dir, f)).mtimeMs < since);
+  for (const f of stale) unlinkSync(join(dir, f));
+  if (stale.length) console.log(`\nPruned ${stale.length} unused cache entries.`);
+}
+
 async function main() {
+  const started = Date.now() - 1000;
   if (process.argv.includes("--reset")) await wipe();
   await seed();
+  pruneCache(started);
 }
 
 main().catch((err) => {
