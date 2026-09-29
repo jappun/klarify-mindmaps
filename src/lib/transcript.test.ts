@@ -59,8 +59,8 @@ describe("parseTranscript tolerance", () => {
   });
 
   it("uses a Therapist header line to find the client", () => {
-    const raw = "Therapist: Jane Doe\n=====\n[0:00] Jane:\nHi.\n[0:02] Alex:\nHey.\n[0:05] Jane:\nOk.";
-    expect(parseTranscript(raw).clientSpeaker).toBe("Alex");
+    const raw = "Therapist: Jane Doe\n=====\n[0:00] Jane:\nHi.\n[0:02] Bob:\nHey.\n[0:05] Jane:\nOk.";
+    expect(parseTranscript(raw).clientSpeaker).toBe("Bob");
   });
 
   it("rejects text without timestamps", () => {
