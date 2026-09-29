@@ -1,7 +1,7 @@
 import { db } from "./db";
 
 // Abuse guard for the public demo: writes (uploads, new clients) per IP per hour.
-const WRITES_PER_HOUR = 10;
+const WRITES_PER_HOUR = 20;
 
 export function clientIp(req: Request) {
   return (req.headers.get("x-forwarded-for") ?? "local").split(",")[0].trim();

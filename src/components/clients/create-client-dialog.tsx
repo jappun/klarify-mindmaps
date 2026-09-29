@@ -64,7 +64,7 @@ export function CreateClientButton() {
                 maxLength={120}
                 onChange={(e) => setName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && create()}
-                placeholder="e.g. Alex Rivera"
+                placeholder="e.g. John Doe"
                 className="h-11 w-full rounded-md border border-klarify-cloud-200 bg-white px-3 text-sm outline-none placeholder:text-klarify-neutral-500 focus-visible:ring-1 focus-visible:ring-ring"
               />
             </label>

@@ -4,18 +4,19 @@
 
 export type SampleSet = {
   id: string;
-  /** Menu heading. */
+  /** Who the set is for, shown in the menu: "For Moody - Alex Session 1". */
   label: string;
   /** The fictional client these sessions belong to. */
   clientName: string;
   sessionCount: number;
 };
 
-// TODO: set the fictional client names once the transcripts are in.
 export const SAMPLE_SETS: SampleSet[] = [
-  { id: "moody", label: "Sample 1 – for Moody", clientName: "Sample Client One", sessionCount: 4 },
-  { id: "bergie", label: "Sample 2 – for Bergie", clientName: "Sample Client Two", sessionCount: 4 },
+  { id: "moody", label: "For Moody", clientName: "Alex", sessionCount: 4 },
+  { id: "bergie", label: "For Bergie", clientName: "Sam", sessionCount: 4 },
 ];
+
+export const sampleTitle = (set: SampleSet, n: number) => `${set.label} - ${set.clientName} Session ${n}`;
 
 export const sampleUrl = (set: SampleSet, n: number) => `/samples/${set.id}/session-${n}.txt`;
 

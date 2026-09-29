@@ -12,7 +12,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { usePipeline } from "@/lib/client/use-pipeline";
 import { MAX_TRANSCRIPT_CHARS } from "@/lib/config";
 import { sessionHref } from "@/lib/routes";
-import { SAMPLE_SETS, sampleSessionDate, sampleUrl, type SampleSet } from "@/lib/samples";
+import { SAMPLE_SETS, sampleSessionDate, sampleTitle, sampleUrl, type SampleSet } from "@/lib/samples";
 import type { ClientSummary } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -102,7 +102,7 @@ function RecordFlow({
     const res = await fetch(sampleUrl(set, n)).catch(() => null);
     if (!res?.ok) return void toast.error("That sample isn't available yet.");
     setText((await res.text()).slice(0, MAX_TRANSCRIPT_CHARS));
-    setFileName(`${set.label} · Session ${n}`);
+    setFileName(sampleTitle(set, n));
     setDate(sampleSessionDate(set, n));
     const existing = clients.find((c) => c.name.trim().toLowerCase() === set.clientName.toLowerCase());
     if (existing) setClientId(existing.id);
@@ -234,7 +234,7 @@ function RecordFlow({
                 autoFocus
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                placeholder="e.g. Alex Rivera"
+                placeholder="e.g. John Doe"
                 maxLength={120}
                 className="h-11 w-full rounded-md border border-klarify-cloud-200 bg-white px-3 text-sm outline-none placeholder:text-klarify-neutral-500 focus-visible:ring-1 focus-visible:ring-ring"
               />
@@ -324,24 +324,22 @@ function ClientSelect({
 
 function SampleMenu({ onPick }: { onPick: (set: SampleSet, n: number) => void }) {
   return (
-    <div className="flex items-center gap-2 text-klarify-neutral-500 text-sm">
-      <span>Don&apos;t have a transcript?</span>
+    <div className="flex items-center text-sm">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
             type="button"
             className="flex items-center gap-1.5 font-medium text-klarify-ocean-500 underline-offset-2 hover:underline"
           >
-            <Sparkles size={14} /> Use a sample session <ChevronDown size={14} />
+            <Sparkles size={14} /> DEMO: Try with a sample session <ChevronDown size={14} />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-64">
-          {SAMPLE_SETS.map((set) => (
-            <div key={set.id} className="py-1">
-              <p className="px-2 pt-1 pb-1 font-medium text-klarify-neutral-500 text-xs">{set.label}</p>
-              {Array.from({ length: set.sessionCount }, (_, i) => i + 1).map((n) => (
+        <DropdownMenuContent align="start" className="w-72">
+          {SAMPLE_SETS.map((set, i) => (
+            <div key={set.id} className={i > 0 ? "mt-1 border-klarify-cloud-100 border-t pt-1" : undefined}>
+              {Array.from({ length: set.sessionCount }, (_, j) => j + 1).map((n) => (
                 <DropdownMenuItem key={n} onSelect={() => onPick(set, n)}>
-                  <FileText /> Session {n}
+                  <FileText /> {sampleTitle(set, n)}
                 </DropdownMenuItem>
               ))}
             </div>
