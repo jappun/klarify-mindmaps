@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { exportMindmapPng, type LegendItem } from "@/lib/client/export-png";
 import { wrapLabel } from "@/lib/mindmap/layout";
 
 export type RenderNode = {
@@ -23,6 +24,11 @@ export type RenderNode = {
 
 export type RenderEdge = { id: string; source: string; target: string; opacity: number; width?: number };
 
+/** Imperative handle for the header's "Download Image". */
+export type CanvasApi = {
+  exportPng: (opts: { title: string; legend: LegendItem[]; filename: string }) => Promise<void>;
+};
+
 type NodeState = { x: number; y: number; r: number; opacity: number };
 type Camera = { x: number; y: number; k: number };
 /** One animation frame: interpolated node/edge state, camera, and nodes fading out. */
@@ -41,6 +47,7 @@ export function MindmapCanvas({
   fitKey,
   onNodeClick,
   onBackgroundClick,
+  apiRef,
   children,
 }: {
   nodes: RenderNode[];
@@ -49,9 +56,11 @@ export function MindmapCanvas({
   fitKey: string;
   onNodeClick?: (id: string) => void;
   onBackgroundClick?: () => void;
+  apiRef?: React.RefObject<CanvasApi | null>;
   children?: React.ReactNode;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
   const [size, setSize] = useState<{ w: number; h: number } | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [view, setView] = useState<View>(EMPTY_VIEW);
@@ -63,6 +72,34 @@ export function MindmapCanvas({
   }, []);
   const lastFitKey = useRef<string | null>(null);
   const raf = useRef<number | null>(null);
+
+  // Export exactly what's on the map now (visible nodes), framed to fit regardless of pan/zoom.
+  useEffect(() => {
+    if (!apiRef) return;
+    apiRef.current = {
+      exportPng: async ({ title, legend, filename }) => {
+        const svg = svgRef.current;
+        const vis = [...viewRef.current.nodes.values()].filter((n) => n.opacity > 0.25);
+        if (!svg || !vis.length) return;
+        const pad = HALO_WIDTH * 1.5;
+        await exportMindmapPng({
+          svg,
+          bounds: {
+            x0: Math.min(...vis.map((n) => n.x - n.r - pad)),
+            x1: Math.max(...vis.map((n) => n.x + n.r + pad)),
+            y0: Math.min(...vis.map((n) => n.y - n.r - pad)),
+            y1: Math.max(...vis.map((n) => n.y + n.r + pad)),
+          },
+          title,
+          legend,
+          filename,
+        });
+      },
+    };
+    return () => {
+      apiRef.current = null;
+    };
+  }, [apiRef]);
 
   // Track container size.
   useLayoutEffect(() => {
@@ -212,6 +249,7 @@ export function MindmapCanvas({
     >
       {size && (
         <svg
+          ref={svgRef}
           width={size.w}
           height={size.h}
           className="block cursor-grab active:cursor-grabbing"
@@ -227,7 +265,7 @@ export function MindmapCanvas({
               <feGaussianBlur stdDeviation="3" />
             </filter>
           </defs>
-          <g transform={`translate(${c.x},${c.y}) scale(${c.k})`}>
+          <g data-camera transform={`translate(${c.x},${c.y}) scale(${c.k})`}>
             <g>
               {edges.map((e) => {
                 const a = view.nodes.get(e.source);

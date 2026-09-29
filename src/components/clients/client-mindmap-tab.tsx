@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import type { ClientGraph } from "@/lib/types";
 
 export function ClientMindmapTab({ graph }: { graph: ClientGraph }) {
   const [openNodeId, setOpenNodeId] = useState<string | null>(null);
+  const downloadRef = useRef<(() => Promise<void>) | null>(null);
 
   if (graph.nodes.length === 0) {
     return (
@@ -30,9 +31,12 @@ export function ClientMindmapTab({ graph }: { graph: ClientGraph }) {
 
   return (
     <div className="-mx-8 flex min-h-0 flex-1 flex-col">
-      <MapHeader title={`${graph.client.name}- Interactive Therapy Mindmap`} />
+      <MapHeader
+        title={`${graph.client.name}- Interactive Therapy Mindmap`}
+        onDownload={async () => downloadRef.current?.()}
+      />
       <div className="relative min-h-130 flex-1">
-        <ClientMindmap graph={graph} onOpenNode={setOpenNodeId} />
+        <ClientMindmap graph={graph} onOpenNode={setOpenNodeId} downloadRef={downloadRef} />
       </div>
       <NodeModal graph={graph} nodeId={openNodeId} context={{ kind: "client" }} onClose={() => setOpenNodeId(null)} />
     </div>

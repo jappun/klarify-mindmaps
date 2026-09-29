@@ -1,12 +1,14 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { slug, type LegendItem } from "@/lib/client/export-png";
+import { formatShortDate } from "@/lib/format";
 import { useEscape } from "@/lib/client/use-escape";
 import { ArrowLeft } from "lucide-react";
-import { MindmapCanvas, type RenderEdge, type RenderNode } from "./canvas";
+import { MindmapCanvas, type CanvasApi, type RenderEdge, type RenderNode } from "./canvas";
 import { MindmapInfoButton } from "./info-button";
 import { MindmapLegend } from "./legend";
-import { NEW_NODE_HALO, NODE_COLORS, OTHER_SESSION_FILL, OTHER_SESSION_STROKE } from "@/lib/mindmap/colors";
+import { NEW_NODE_HALO, NODE_COLORS, OTHER_SESSION_FILL, OTHER_SESSION_STROKE, TYPE_LABEL_PLURAL } from "@/lib/mindmap/colors";
 import { forceLayout, ringLayout } from "@/lib/mindmap/layout";
 import { buildSessionModel, neighborsOf, sessionsLabel } from "@/lib/mindmap/session-view";
 import { NODE_TYPES, type ClientGraph, type NodeType } from "@/lib/types";
@@ -19,10 +21,13 @@ export function SessionMindmap({
   graph,
   sessionId,
   onOpenNode,
+  downloadRef,
 }: {
   graph: ClientGraph;
   sessionId: string;
   onOpenNode: (nodeId: string) => void;
+  /** Filled with a function that downloads the current view as a PNG. */
+  downloadRef?: React.RefObject<(() => Promise<void>) | null>;
 }) {
   const model = useMemo(() => buildSessionModel(graph, sessionId), [graph, sessionId]);
   const [focusId, setFocusId] = useState<string | null>(null);
@@ -138,6 +143,30 @@ export function SessionMindmap({
 
   useEscape(() => setFocusId(null));
 
+  const canvasApi = useRef<CanvasApi | null>(null);
+  useEffect(() => {
+    if (!downloadRef || !model) return;
+    downloadRef.current = async () => {
+      const shown = new Set(frame.nodes.map((n) => n.id));
+      const visible = model.nodes.filter((n) => shown.has(n.id));
+      const focused = focusId ? model.nodes.find((n) => n.id === focusId) : null;
+      const legend: LegendItem[] = NODE_TYPES.filter((t) => visible.some((n) => n.type === t && (focusId || n.inSession))).map(
+        (t) => ({ label: TYPE_LABEL_PLURAL[t], color: NODE_COLORS[t] }),
+      );
+      if (!focusId && visible.some((n) => n.isNew)) legend.push({ label: "New this session", color: NEW_NODE_HALO, style: "halo" });
+      if (!focusId && visible.some((n) => !n.inSession)) legend.push({ label: "Earlier sessions", color: OTHER_SESSION_FILL, style: "gray" });
+      const s = model.session;
+      await canvasApi.current?.exportPng({
+        title: `${graph.client.name} — Session ${s.session_number} · ${formatShortDate(s.session_date)}${focused ? ` · ${focused.label}` : ""}`,
+        legend,
+        filename: `${slug(graph.client.name)}-session-${s.session_number}${focused ? `-${slug(focused.label)}` : ""}-mindmap.png`,
+      });
+    };
+    return () => {
+      downloadRef.current = null;
+    };
+  }, [downloadRef, model, frame, focusId, graph.client.name]);
+
   const toggleType = (type: NodeType) =>
     setHidden((h) => {
       const next = new Set(h);
@@ -154,6 +183,7 @@ export function SessionMindmap({
       edges={frame.edges}
       fitKey={`${focusId ?? "default"}|${[...hidden].sort().join(",")}`}
       onNodeClick={onNodeClick}
+      apiRef={canvasApi}
     >
       {focusId && (
         <button

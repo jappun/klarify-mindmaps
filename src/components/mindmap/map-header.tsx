@@ -1,13 +1,27 @@
 "use client";
 
-import { Download, Save, Share2, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Download, Loader2, Save, Share2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 const notInDemo = () => toast("Not in this demo");
 
-// Header row above the canvas, from klarify-session-mindmap.png. Actions are visible but inert.
-export function MapHeader({ title }: { title: string }) {
+// Header row above the canvas, from klarify-session-mindmap.png. Download works; the rest are inert.
+export function MapHeader({ title, onDownload }: { title: string; onDownload?: () => Promise<void> }) {
+  const [busy, setBusy] = useState(false);
+  const download = async () => {
+    if (!onDownload || busy) return;
+    setBusy(true);
+    try {
+      await onDownload();
+    } catch (err) {
+      console.error(err);
+      toast.error("Couldn't create the image.");
+    } finally {
+      setBusy(false);
+    }
+  };
   return (
     <div className="flex items-center justify-between gap-4 border-klarify-neutral-200 border-b px-6 pb-4">
       <h2 className="min-w-0 truncate text-klarify-neutral-700 text-lg">{title}</h2>
@@ -15,8 +29,8 @@ export function MapHeader({ title }: { title: string }) {
         <Button variant="outline" className="h-11 gap-2 text-base" onClick={notInDemo}>
           <Save size={18} /> Save Node Positions
         </Button>
-        <Button variant="outline" className="h-11 gap-2 text-base" onClick={notInDemo}>
-          <Download size={18} /> Download Image
+        <Button variant="outline" className="h-11 gap-2 text-base" onClick={download} disabled={busy}>
+          {busy ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />} Download Image
         </Button>
         <Button
           variant="outline"
