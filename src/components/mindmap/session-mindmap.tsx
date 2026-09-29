@@ -6,9 +6,9 @@ import { ArrowLeft } from "lucide-react";
 import { MindmapCanvas, type RenderEdge, type RenderNode } from "./canvas";
 import { MindmapInfoButton } from "./info-button";
 import { MindmapLegend } from "./legend";
-import { NODE_COLORS, OTHER_SESSION_FILL, OTHER_SESSION_STROKE } from "@/lib/mindmap/colors";
+import { NEW_NODE_HALO, NODE_COLORS, OTHER_SESSION_FILL, OTHER_SESSION_STROKE } from "@/lib/mindmap/colors";
 import { forceLayout, ringLayout } from "@/lib/mindmap/layout";
-import { buildSessionModel, neighborsOf, sessionsLabel, sessionTag } from "@/lib/mindmap/session-view";
+import { buildSessionModel, neighborsOf, sessionsLabel } from "@/lib/mindmap/session-view";
 import { NODE_TYPES, type ClientGraph, type NodeType } from "@/lib/types";
 
 const R_FULL: Record<NodeType, number> = { narrative: 62, belief: 54, strategy: 54, need: 54, value: 54 };
@@ -79,7 +79,7 @@ export function SessionMindmap({
                 opacity: 1,
                 label: n.label,
                 clickable: true,
-                badgeTop: n.isNew ? "New" : undefined,
+                halo: n.isNew ? NEW_NODE_HALO : undefined,
               }
             : {
                 id: n.id,
@@ -120,7 +120,6 @@ export function SessionMindmap({
         opacity: 1,
         label: n.label,
         clickable: true,
-        tagBelow: n.id === focusId ? undefined : sessionTag(n.sessionNumbers),
       })),
       edges: model.edges
         .filter((e) => (e.source === focusId && neighborIds.has(e.target)) || (e.target === focusId && neighborIds.has(e.source)))
@@ -174,10 +173,11 @@ export function SessionMindmap({
               <b className="font-medium text-klarify-gray-mod-800">Small gray nodes</b> are from earlier sessions — hover
               to see what they are.
             </>,
+            "A yellow halo marks themes that came up for the first time in this session.",
             "Click a colored node to focus on it and everything it connects to, across all sessions.",
             "In focus, click any node again to open its details.",
             "Press Esc or the back arrow to return to the full map.",
-            "Click a type in the legend to hide or show it.",
+            "Untick a type in the legend to hide it from the map.",
           ]}
         />
       </div>

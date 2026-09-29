@@ -12,9 +12,9 @@ import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
-const TABS: { label: string; tab?: SessionTab }[] = [
+const TABS: { label: string; tab?: SessionTab | "client" }[] = [
   { label: "Notes" },
-  { label: "Client" },
+  { label: "Client", tab: "client" },
   { label: "Treatment Plan" },
   { label: "Transcript" },
   { label: "Session Information" },
@@ -50,7 +50,13 @@ export default async function SessionPage({ params, searchParams }: PageProps<"/
           return (
             <Link
               key={t.label}
-              href={t.tab ? sessionHref(session.id, t.tab) : NOT_IN_DEMO}
+              href={
+                t.tab === "client"
+                  ? clientHref(session.client_id, "sessions")
+                  : t.tab
+                    ? sessionHref(session.id, t.tab)
+                    : NOT_IN_DEMO
+              }
               className={cn(
                 "border-b-2 px-3 pb-2 text-base transition-colors",
                 active

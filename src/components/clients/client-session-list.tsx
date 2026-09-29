@@ -1,14 +1,28 @@
 import Link from "next/link";
-import { EllipsisVertical, FilePen, Loader2 } from "lucide-react";
-import { NOT_IN_DEMO } from "@/lib/config";
+import { EllipsisVertical, FilePen, Loader2, Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { NOT_IN_DEMO, UPLOAD_HREF } from "@/lib/config";
 import { formatDayHeader, sessionTitle } from "@/lib/format";
 import { sessionHref } from "@/lib/routes";
 import type { Session } from "@/lib/types";
 
 // Client page → Sessions tab. Same date-group header + row pattern as the Records page.
-export function ClientSessionList({ sessions }: { sessions: Session[] }) {
+export function ClientSessionList({ sessions, clientId }: { sessions: Session[]; clientId: string }) {
   const byDay = new Map<string, Session[]>();
   for (const s of sessions) byDay.set(s.session_date, [...(byDay.get(s.session_date) ?? []), s]);
+
+  if (sessions.length === 0) {
+    return (
+      <div className="flex min-h-60 flex-col items-center justify-center gap-4 text-center">
+        <p className="text-klarify-neutral-500 text-sm">No sessions yet.</p>
+        <Button asChild className="gap-2 px-6">
+          <Link href={`${UPLOAD_HREF}&client=${clientId}`}>
+            <Upload size={16} /> Upload a session
+          </Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <ul className="w-full">

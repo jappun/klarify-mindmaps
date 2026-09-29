@@ -17,10 +17,8 @@ export type RenderNode = {
   hoverFill?: string;
   tooltip?: string;
   clickable: boolean;
-  /** Small pill above the node, e.g. "New". */
-  badgeTop?: string;
-  /** Small pill below the node, e.g. "S1, S2". */
-  tagBelow?: string;
+  /** Soft colored ring around the node (e.g. first appearance in this session). */
+  halo?: string;
   /** Count pill at the node's top-right, e.g. attached-node count. */
   count?: number;
 };
@@ -35,6 +33,7 @@ const EMPTY_VIEW: View = { nodes: new Map(), edges: new Map(), cam: { x: 0, y: 0
 
 const DURATION = 350;
 const FIT_PADDING = 56;
+const HALO_WIDTH = 9;
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
@@ -81,10 +80,11 @@ export function MindmapCanvas({
       if (!size) return viewRef.current.cam;
       const vis = list.filter((n) => n.opacity > 0.25);
       if (!vis.length) return viewRef.current.cam;
-      const x0 = Math.min(...vis.map((n) => n.x - n.r));
-      const x1 = Math.max(...vis.map((n) => n.x + n.r));
-      const y0 = Math.min(...vis.map((n) => n.y - n.r - (n.badgeTop ? 18 : 0)));
-      const y1 = Math.max(...vis.map((n) => n.y + n.r + (n.tagBelow ? 30 : 0)));
+      const pad = (n: RenderNode) => n.r + (n.halo ? HALO_WIDTH : 0);
+      const x0 = Math.min(...vis.map((n) => n.x - pad(n)));
+      const x1 = Math.max(...vis.map((n) => n.x + pad(n)));
+      const y0 = Math.min(...vis.map((n) => n.y - pad(n)));
+      const y1 = Math.max(...vis.map((n) => n.y + pad(n)));
       const k = Math.min(
         (size.w - FIT_PADDING * 2) / Math.max(x1 - x0, 1),
         (size.h - FIT_PADDING * 2) / Math.max(y1 - y0, 1),
@@ -225,6 +225,9 @@ export function MindmapCanvas({
             <filter id="node-shadow" x="-30%" y="-30%" width="160%" height="160%">
               <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.12" />
             </filter>
+            <filter id="node-halo" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" />
+            </filter>
           </defs>
           <g transform={`translate(${c.x},${c.y}) scale(${c.k})`}>
             <g>
@@ -268,6 +271,12 @@ export function MindmapCanvas({
                     if (n.clickable) onNodeClick?.(n.id);
                   }}
                 >
+                  {n.halo && (
+                    <>
+                      <circle r={st.r + HALO_WIDTH / 2} fill="none" stroke={n.halo} strokeWidth={HALO_WIDTH * 1.6} opacity={0.55} filter="url(#node-halo)" />
+                      <circle r={st.r + HALO_WIDTH / 2} fill="none" stroke={n.halo} strokeWidth={HALO_WIDTH} />
+                    </>
+                  )}
                   <circle
                     r={st.r}
                     fill={isHover && n.hoverFill ? n.hoverFill : n.fill}
@@ -290,16 +299,6 @@ export function MindmapCanvas({
                         </tspan>
                       ))}
                     </text>
-                  )}
-                  {n.badgeTop && (
-                    <Pill x={0} y={-st.r - 4} anchor="bottom" className="bg-klarify-peach-50 font-semibold text-klarify-peach-700">
-                      {n.badgeTop}
-                    </Pill>
-                  )}
-                  {n.tagBelow && (
-                    <Pill x={0} y={st.r + 6} anchor="top" className="border border-border bg-white text-klarify-gray-mod-800">
-                      {n.tagBelow}
-                    </Pill>
                   )}
                   {n.count !== undefined && (
                     <Pill

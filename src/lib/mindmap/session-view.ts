@@ -61,11 +61,3 @@ export function sessionsLabel(nums: number[]) {
   const sorted = [...nums].sort((a, b) => a - b);
   return `${sorted.length === 1 ? "Session" : "Sessions"} ${sorted.join(", ")}`;
 }
-
-/** "S1" / "S1, S3" */
-export function sessionTag(nums: number[]) {
-  return [...nums]
-    .sort((a, b) => a - b)
-    .map((n) => `S${n}`)
-    .join(", ");
-}

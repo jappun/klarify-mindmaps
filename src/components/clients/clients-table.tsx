@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { EllipsisVertical, ListFilter, Plus } from "lucide-react";
+import { EllipsisVertical, ListFilter } from "lucide-react";
+import { CreateClientButton } from "./create-client-dialog";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
 import { NOT_IN_DEMO } from "@/lib/config";
@@ -42,12 +43,7 @@ export function ClientsTable({ clients }: { clients: ClientSummary[] }) {
               </Link>
             </Button>
           </div>
-          <Button asChild className="flex w-36">
-            <Link href={NOT_IN_DEMO}>
-              <Plus size={16} />
-              <span className="ml-2 text-nowrap">Create New</span>
-            </Link>
-          </Button>
+          <CreateClientButton />
         </div>
         <div className="relative h-[calc(100vh-156px)] overflow-y-auto px-4">
           <table className="w-full caption-bottom text-sm">

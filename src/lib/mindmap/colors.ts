@@ -13,6 +13,9 @@ export const NODE_COLORS: Record<NodeType, string> = {
 export const OTHER_SESSION_FILL = "#e0e0e0";
 export const OTHER_SESSION_STROKE = "#cfcfcf";
 
+/** Halo on nodes that first appear in the session being viewed (Klarify's amber-200). */
+export const NEW_NODE_HALO = "#fee685";
+
 export const TYPE_LABEL: Record<NodeType, string> = {
   narrative: "Narrative",
   belief: "Belief",

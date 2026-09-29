@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronDown, List } from "lucide-react";
+import { Check, ChevronDown, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { NODE_COLORS, OTHER_SESSION_FILL, OTHER_SESSION_STROKE, TYPE_LABEL_PLURAL } from "@/lib/mindmap/colors";
+import { NEW_NODE_HALO, NODE_COLORS, OTHER_SESSION_FILL, OTHER_SESSION_STROKE, TYPE_LABEL_PLURAL } from "@/lib/mindmap/colors";
 import { NODE_TYPES, type NodeType } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "mindmap-legend-collapsed";
 
-// Klarify's MindmapLegend markup, plus a type filter and an optional gray "other sessions" swatch.
+// Klarify's MindmapLegend markup. With `onToggle`, types become color-filled checkboxes that filter
+// the map; the session map also shows the "new this session" halo and the gray "other sessions" swatch.
 export function MindmapLegend({
   hidden,
   onToggle,
@@ -62,23 +63,49 @@ export function MindmapLegend({
       </button>
       <div className="flex flex-col gap-2 p-3 text-xs">
         {NODE_TYPES.map((type) => {
-          const off = hidden?.has(type);
+          const color = NODE_COLORS[type];
+          if (!onToggle) {
+            return (
+              <div key={type} className="flex items-center gap-2">
+                <div className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: color }} />
+                <span className="text-klarify-gray-mod-600">{TYPE_LABEL_PLURAL[type]}</span>
+              </div>
+            );
+          }
+          const on = !hidden?.has(type);
           return (
             <button
               key={type}
               type="button"
-              disabled={!onToggle}
-              onClick={() => onToggle?.(type)}
-              title={onToggle ? (off ? "Show" : "Hide") : undefined}
-              className={cn("flex items-center gap-2 text-left transition-opacity", off && "opacity-40")}
+              role="checkbox"
+              aria-checked={on}
+              onClick={() => onToggle(type)}
+              title={on ? "Hide from map" : "Show on map"}
+              className="group flex items-center gap-2 text-left"
             >
-              <div className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: NODE_COLORS[type] }} />
-              <span className={cn("text-klarify-gray-mod-600", off && "line-through")}>{TYPE_LABEL_PLURAL[type]}</span>
+              <span
+                className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-[3px] border-[1.5px] transition-colors"
+                style={{ backgroundColor: on ? color : "#ffffff", borderColor: color }}
+              >
+                {on && <Check size={10} strokeWidth={3.5} className="text-white" />}
+              </span>
+              <span className={cn("text-klarify-gray-mod-600 transition-opacity group-hover:text-klarify-gray-mod-800", !on && "opacity-50")}>
+                {TYPE_LABEL_PLURAL[type]}
+              </span>
             </button>
           );
         })}
         {showOtherSessions && (
-          <div className="flex max-w-40 items-start gap-2 border-klarify-gray-mod-200 border-t pt-2">
+          <div className="flex items-center gap-2 border-klarify-gray-mod-200 border-t pt-2">
+            <div
+              className="h-3 w-3 shrink-0 rounded-full bg-white"
+              style={{ boxShadow: `0 0 0 2.5px ${NEW_NODE_HALO}, 0 0 5px 2px ${NEW_NODE_HALO}` }}
+            />
+            <span className="text-klarify-gray-mod-600">New this session</span>
+          </div>
+        )}
+        {showOtherSessions && (
+          <div className="flex max-w-40 items-start gap-2">
             <div
               className="mt-0.5 h-3 w-3 shrink-0 rounded-full border"
               style={{ backgroundColor: OTHER_SESSION_FILL, borderColor: OTHER_SESSION_STROKE }}

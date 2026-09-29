@@ -86,7 +86,7 @@ export default async function ClientPage({ params, searchParams }: PageProps<"/c
         </nav>
 
         {tab === "sessions" ? (
-          <ClientSessionList sessions={sessions} />
+          <ClientSessionList sessions={sessions} clientId={client.id} />
         ) : (
           graph && (
             <QuestionsProvider initial={graph.questions}>

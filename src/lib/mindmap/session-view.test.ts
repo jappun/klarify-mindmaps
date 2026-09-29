@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { ClientGraph, GraphNode, Session } from "../types";
 import { forceLayout, ringLayout } from "./layout";
-import { buildSessionModel, sessionsLabel, sessionTag } from "./session-view";
+import { buildSessionModel, sessionsLabel } from "./session-view";
 
 const session = (n: number): Session => ({
   id: `S${n}`,
@@ -56,7 +56,6 @@ describe("buildSessionModel", () => {
   it("formats session labels", () => {
     expect(sessionsLabel([2, 1])).toBe("Sessions 1, 2");
     expect(sessionsLabel([3])).toBe("Session 3");
-    expect(sessionTag([3, 1])).toBe("S1, S3");
   });
 });
 
