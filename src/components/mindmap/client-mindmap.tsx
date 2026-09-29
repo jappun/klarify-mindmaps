@@ -9,12 +9,13 @@ import { MindmapInfoButton } from "./info-button";
 import { MindmapLegend } from "./legend";
 import { useEscape } from "@/lib/client/use-escape";
 import { RECURRING_LIMIT, recurringThemes } from "@/lib/mindmap/client-view";
-import { NODE_COLORS, TYPE_LABEL_PLURAL } from "@/lib/mindmap/colors";
+import { NODE_COLORS, OTHER_SESSION_FILL, OTHER_SESSION_STROKE, TYPE_LABEL_PLURAL } from "@/lib/mindmap/colors";
 import { forceLayout, ringLayout } from "@/lib/mindmap/layout";
 import { neighborsOf, sessionsLabel } from "@/lib/mindmap/session-view";
 import { NODE_TYPES, type ClientGraph, type GraphNode, type NodeType } from "@/lib/types";
 
 const R: Record<NodeType, number> = { narrative: 62, belief: 54, strategy: 54, need: 54, value: 54 };
+const SMALL = 0.6;
 const TYPE_ORDER = new Map(NODE_TYPES.map((t, i) => [t, i]));
 
 type Mode = "recurring" | "full";
@@ -46,8 +47,10 @@ export function ClientMindmap({
     });
   // One-session clients already see everything, so the toggle has nothing to switch.
   const canToggle = !recurring.showingAll;
-  const view = useMemo(
-    () => (mode === "full" || !canToggle ? { ...recurring, nodes: graph.nodes } : recurring),
+  // Highlighted themes are full-size and colored; in "Most recurring" the rest are small and gray
+  // (like earlier sessions on a session map), hover-only, but still reachable through focus.
+  const highlighted = useMemo(
+    () => new Set((mode === "full" || !canToggle ? graph.nodes : recurring.nodes).map((n) => n.id)),
     [mode, canToggle, recurring, graph.nodes],
   );
   const switchMode = (m: Mode) => {
@@ -63,18 +66,25 @@ export function ClientMindmap({
 
   // Default layout, seeded per client so it never reshuffles.
   const basePositions = useMemo(() => {
-    const ids = new Set(view.nodes.map((n) => n.id));
+    const ids = new Set(graph.nodes.map((n) => n.id));
     return forceLayout(
-      view.nodes.map((n) => ({ id: n.id, r: R[n.type], group: n.primary_narrative_id && ids.has(n.primary_narrative_id) ? n.primary_narrative_id : n.id })),
+      graph.nodes.map((n) => ({
+        id: n.id,
+        r: R[n.type] * (highlighted.has(n.id) ? 1 : SMALL),
+        group: n.primary_narrative_id && ids.has(n.primary_narrative_id) ? n.primary_narrative_id : n.id,
+      })),
       [
-        ...graph.edges.filter((e) => ids.has(e.source) && ids.has(e.target)).map((e) => ({ source: e.source, target: e.target })),
-        ...view.nodes
+        ...graph.edges.map((e) => ({ source: e.source, target: e.target })),
+        ...graph.nodes
           .filter((n) => n.primary_narrative_id && ids.has(n.primary_narrative_id))
           .map((n) => ({ source: n.id, target: n.primary_narrative_id!, strength: 0.15 })),
       ],
       `client:${graph.client.id}:${mode}`,
+      // A client's whole graph has loosely-linked clusters: keep it compact so it fits at a readable zoom.
+      1.5,
+      0.5,
     );
-  }, [view, graph.edges, graph.client.id, mode]);
+  }, [graph.nodes, graph.edges, graph.client.id, mode, highlighted]);
 
   // Focus ring around the focused node's resting position.
   const focus = useMemo(() => {
@@ -106,13 +116,32 @@ export function ClientMindmap({
     const shown = (n: GraphNode) => !hidden.has(n.type) || n.id === focusId;
 
     if (!focus) {
-      const visible = view.nodes.filter(shown);
+      const visible = graph.nodes.filter(shown);
       const ids = new Set(visible.map((n) => n.id));
       return {
-        nodes: visible.map((n) => render(n, basePositions.get(n.id)!)),
+        nodes: visible.map((n) =>
+          highlighted.has(n.id)
+            ? render(n, basePositions.get(n.id)!)
+            : {
+                id: n.id,
+                ...basePositions.get(n.id)!,
+                r: R[n.type] * SMALL,
+                fill: OTHER_SESSION_FILL,
+                stroke: OTHER_SESSION_STROKE,
+                hoverFill: NODE_COLORS[n.type],
+                tooltip: `${n.label} · ${tooltip(n)}`,
+                opacity: 1,
+                clickable: false,
+              },
+        ),
         edges: graph.edges
           .filter((e) => ids.has(e.source) && ids.has(e.target))
-          .map((e) => ({ id: e.id, source: e.source, target: e.target, opacity: 0.9 })),
+          .map((e) => ({
+            id: e.id,
+            source: e.source,
+            target: e.target,
+            opacity: highlighted.has(e.source) && highlighted.has(e.target) ? 0.9 : 0.4,
+          })),
       };
     }
 
@@ -124,7 +153,7 @@ export function ClientMindmap({
         .filter((e) => (e.source === focusId && ids.has(e.target)) || (e.target === focusId && ids.has(e.source)))
         .map((e) => ({ id: e.id, source: e.source, target: e.target, opacity: 1, width: 1.8 })),
     };
-  }, [view, basePositions, focus, focusId, graph.edges, tooltip, hidden]);
+  }, [graph.nodes, highlighted, basePositions, focus, focusId, graph.edges, tooltip, hidden]);
 
   const onNodeClick = useCallback(
     (id: string) => {
@@ -142,10 +171,14 @@ export function ClientMindmap({
     downloadRef.current = async () => {
       const shown = new Set(frame.nodes.map((n) => n.id));
       const focused = focusId ? graph.nodes.find((n) => n.id === focusId) : null;
-      const legend: LegendItem[] = NODE_TYPES.filter((t) => graph.nodes.some((n) => n.type === t && shown.has(n.id))).map((t) => ({
+      const colored = (n: GraphNode) => shown.has(n.id) && (!!focusId || highlighted.has(n.id));
+      const legend: LegendItem[] = NODE_TYPES.filter((t) => graph.nodes.some((n) => n.type === t && colored(n))).map((t) => ({
         label: TYPE_LABEL_PLURAL[t],
         color: NODE_COLORS[t],
       }));
+      if (!focusId && graph.nodes.some((n) => shown.has(n.id) && !highlighted.has(n.id))) {
+        legend.push({ label: "Other themes", color: OTHER_SESSION_FILL, style: "gray" });
+      }
       const which = focused ? focused.label : mode === "full" || !canToggle ? "Full map" : "Most recurring themes";
       await canvasApi.current?.exportPng({
         title: `${graph.client.name} — ${which}`,
@@ -156,7 +189,7 @@ export function ClientMindmap({
     return () => {
       downloadRef.current = null;
     };
-  }, [downloadRef, frame, focusId, graph, mode, canToggle]);
+  }, [downloadRef, frame, focusId, graph, mode, canToggle, highlighted]);
 
   return (
     <MindmapCanvas
@@ -205,7 +238,7 @@ export function ClientMindmap({
           items={[
             !canToggle
               ? "This client has one session so far, so every theme is shown. Once there are more sessions, the map opens on the themes that recur most."
-              : `"Most recurring" shows the ${RECURRING_LIMIT} themes that came up in the most sessions; "Full map" shows every theme. Hover a node to see which sessions.`,
+              : `"Most recurring" highlights the ${RECURRING_LIMIT} themes that came up in the most sessions; the rest are small and gray (hover to see them). "Full map" shows every theme in color.`,
             "Click a node to focus on it and everything it connects to, across all sessions.",
             "In focus, click any node again to open its details.",
             "Press Esc or the back arrow to return.",
@@ -214,7 +247,12 @@ export function ClientMindmap({
         />
       </div>
       <div className="absolute right-4 bottom-4">
-        <MindmapLegend hidden={hidden} onToggle={toggleType} />
+        <MindmapLegend
+          hidden={hidden}
+          onToggle={toggleType}
+          showOtherSessions={highlighted.size < graph.nodes.length}
+          otherLabel="Other themes — hover to see type"
+        />
       </div>
     </MindmapCanvas>
   );

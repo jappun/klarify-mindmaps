@@ -16,11 +16,14 @@ export function MindmapLegend({
   onToggle,
   showNew = false,
   showOtherSessions = false,
+  otherLabel = "From other sessions — hover to see type",
 }: {
   hidden?: Set<NodeType>;
   onToggle?: (type: NodeType) => void;
   showNew?: boolean;
   showOtherSessions?: boolean;
+  /** Label for the gray swatch. */
+  otherLabel?: string;
 }) {
   const [collapsed, setCollapsed] = useState(false);
   useEffect(() => {
@@ -112,7 +115,7 @@ export function MindmapLegend({
               className="mt-0.5 h-3 w-3 shrink-0 rounded-full border"
               style={{ backgroundColor: OTHER_SESSION_FILL, borderColor: OTHER_SESSION_STROKE }}
             />
-            <span className="text-klarify-gray-mod-600">From other sessions — hover to see type</span>
+            <span className="text-klarify-gray-mod-600">{otherLabel}</span>
           </div>
         )}
       </div>

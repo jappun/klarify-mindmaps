@@ -29,7 +29,14 @@ type SimNode = SimulationNodeDatum & LayoutNode;
  * Seeded force layout. `group` (e.g. primary narrative id) pulls nodes toward their cluster.
  * Positions are centered on (0,0); the canvas fits the camera to them.
  */
-export function forceLayout(nodes: LayoutNode[], links: LayoutLink[], seed: string, aspect = 2.2): Map<string, Point> {
+export function forceLayout(
+  nodes: LayoutNode[],
+  links: LayoutLink[],
+  seed: string,
+  aspect = 2.2,
+  /** Scales the gaps between nodes (link length beyond touching, repulsion, collision padding). */
+  spacing = 1,
+): Map<string, Point> {
   const rng = seededRandom(hashString(seed));
   const sorted = [...nodes].sort((a, b) => a.id.localeCompare(b.id));
   const groups = [...new Set(sorted.map((n) => n.group ?? n.id))];
@@ -57,12 +64,12 @@ export function forceLayout(nodes: LayoutNode[], links: LayoutLink[], seed: stri
         .distance((l) => {
           const s = byId.get(typeof l.source === "string" ? l.source : (l.source as SimNode).id)!;
           const t = byId.get(typeof l.target === "string" ? l.target : (l.target as SimNode).id)!;
-          return s.r + t.r + 90;
+          return s.r + t.r + 90 * spacing;
         })
         .strength((l) => l.strength ?? 0.25),
     )
-    .force("charge", forceManyBody<SimNode>().strength((d) => -22 * d.r))
-    .force("collide", forceCollide<SimNode>((d) => d.r + 22).iterations(3))
+    .force("charge", forceManyBody<SimNode>().strength((d) => -22 * spacing * d.r))
+    .force("collide", forceCollide<SimNode>((d) => d.r + 22 * spacing).iterations(3))
     .force("x", forceX<SimNode>(0).strength(0.025))
     .force("y", forceY<SimNode>(0).strength(0.025 * aspect * aspect))
     .stop()
